@@ -4,6 +4,8 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+from sklearn.preprocessing import StandardScaler
+
 
 ##### Preprocessing
 
@@ -11,15 +13,12 @@ gse101521 = pd.read_csv('data/GSE101521_totalRNA_counts.csv',index_col=0)
 gse101521_meta = pd.read_csv('data/GSE101521_samples_metadata.csv')
 
 # Find indices of control or MDD
-control_ind = np.where(gse101521_meta['diagnosis'] == 'CON')[0]
-mdd_ind = np.where((gse101521_meta['diagnosis'] == 'MDD') | (gse101521_meta['diagnosis'] == 'MDD-S'))[0]
+control_ids = gse101521_meta[gse101521_meta['diagnosis'] == 'CON']['name']
+mdd_ids = gse101521_meta[(gse101521_meta['diagnosis'] == 'MDD') | (gse101521_meta['diagnosis'] == 'MDD-S')]['name']
 
-# metadata file contains more samples than full data, so only take metadata thats in full data file
-control_ind = control_ind[control_ind < len(gse101521.columns)]
-mdd_ind = mdd_ind[mdd_ind < len(gse101521.columns)]
-
-gse101521_c = gse101521.iloc[:,control_ind]
-gse101521_m = gse101521.iloc[:,mdd_ind]
+#Separate into control and mdd sets
+gse101521_c = gse101521[gse101521.columns.intersection(control_ids)]
+gse101521_m = gse101521[gse101521.columns.intersection(mdd_ids)]
 
 
 ## GSE80655
@@ -41,6 +40,21 @@ gse42546c_or_m_meta = gse42546_meta[(gse42546_meta['diagnosis'] == 'control') | 
 gse42546c_or_m_meta.to_csv('data/GSE42546_meta.csv',index_label=False)
 gse42546c_or_m = gse42546.loc[:,gse42546c_or_m_meta.index]
 gse42546c_or_m.to_csv('data/GSE42546_data.csv',index_label=False)
+
+
+### Load data
+gse80655 = pd.read_csv('data/GSE80655_data_norm.csv',index_col=0)
+gse80655_meta = pd.read_csv('data/GSE80655_meta.csv')
+
+control_ids = gse80655_meta[gse80655_meta['diagnosis'] == 'C'].index
+mdd_ids = gse80655_meta[gse80655_meta['diagnosis'] == 'M'].index
+
+#Separate into control and mdd sets
+gse80655_c = gse80655[gse80655.columns.intersection(control_ids)]
+gse80655_m = gse80655[gse80655.columns.intersection(mdd_ids)]
+
+
+#### Normalize Data
 
 
 
