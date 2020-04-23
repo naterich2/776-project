@@ -1,4 +1,5 @@
 library("DESeq2")
+setwd("~/Documents/SPRING 20/BMI 776/Project")
 GSE80655 <- read.csv('data/GSE80655_data.csv')
 GSE80655_meta <- read.csv('data/GSE80655_meta.csv')
 
