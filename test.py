@@ -113,6 +113,35 @@ ax2.set_zlabel('DC3')
 plt.show()
 
 # Mutual Information
+def calc_mi(gene,age,diagnosis,how='all'):
+    """TODO: Docstring for calc_mi.
+
+    Parameters
+    ----------
+    gene : TODO
+    age : TODO
+    diagnosis : TODO
+    diagnosis : TODO, optional
+
+    Returns
+    -------
+    TODO
+
+    """
+    if how == 'all':
+
+    elif how == 'age':
+
+    elif how == 'diagnosis':
+
+    else:
+        raise ValueError("How needs to be one of {'all','age','diganosis'}")
+
+meta = age_info.loc[total.index,:]
+for gene in total.columns:
+    gene_min = np.min(total.loc[:,gene])
+    gene_max = np.max(total.loc[:,gene])
+    bins = np.linspace(gene_min,gene_max,10)
 
 
 
