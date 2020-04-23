@@ -68,6 +68,8 @@ total = control.append(mdd)
 total.to_csv('data/total_data.csv',index_label=False)
 
 age_info['colors'] = age_info['diagnosis'].replace('M','0').replace('C','1')
+age_info['diag_cat'] = 0
+age_info.loc[age_info['diagnosis'] == 'M','diag_cat'] = 1
 
 
 ### DIFFUSIONMAP/TSNE
@@ -128,20 +130,14 @@ def calc_mi(gene,age,diagnosis,how='all'):
     TODO
 
     """
-    if how == 'all':
 
-    elif how == 'age':
-
-    elif how == 'diagnosis':
-
-    else:
-        raise ValueError("How needs to be one of {'all','age','diganosis'}")
-
-meta = age_info.loc[total.index,:]
+meta = age_info.loc[total.index,['age','diag_cat']]
+diag_bins = np.array([0,1,2])
 for gene in total.columns:
-    gene_min = np.min(total.loc[:,gene])
-    gene_max = np.max(total.loc[:,gene])
-    bins = np.linspace(gene_min,gene_max,10)
+e   joint_df = meta
+    joint_df[gene] = total.loc[:,gene]
+
+    join = np.histogramdd()
 
 
 
