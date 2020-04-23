@@ -1,4 +1,4 @@
 data/
 .Rhistory
-.Rdata
-.RdataTmp
+.RData
+.RDataTmp
