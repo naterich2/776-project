@@ -66,3 +66,4 @@ def preprocess():
     ### Mutual Information
     meta = age_info.loc[total.index,['age','diag_cat']]
     meta.columns = ['age','diagnosis']
+    return (total,meta)

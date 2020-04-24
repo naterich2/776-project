@@ -277,7 +277,7 @@ class MI(object):
         #Benjamini-Hochberg
         p_vals = pd.DataFrame(data=p,columns=['p'],index=self._data.columns)
         p_vals = p_vals.sort_values('p')
-        return p_vals[pvals['p'] <= FDR]
+        return p_vals
 
 
 
