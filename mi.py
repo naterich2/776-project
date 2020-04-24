@@ -2,6 +2,7 @@
 import numpy as np
 import pandas as pd
 import math
+import scipy.stats as stats
 
 class MI(object):
 
@@ -222,19 +223,59 @@ class MI(object):
         diag_age_counts = diag_age_counts + \
                 (total_counts_size/((self._diag_bins.shape[0] - 1)*(self._age_bins.shape[0] - 1))) * self._pseudo
 
-        self._age_dist = age_counts/np.sum(age_counts)
-        self._diag_dist = diag_counts/np.sum(diag_counts)
-        diag_age_dist = diag_age_counts/np.sum(diag_age_counts)
+        self._age_dist = age_counts/self._obs
+        self._diag_dist = diag_counts/self._obs
+        diag_age_dist = diag_age_counts/self._obs
 
         self._H_age = - np.sum(self._age_dist*np.log2(self._age_dist))
         self._H_diag = - np.sum(self._diag_dist*np.log2(self._diag_dist))
         self._H_diag_age = - np.sum(diag_age_dist*np.log2(diag_age_dist))
 
-#        MIs = {}
-#        for gene in self._data.columns:
-#            MI = self._calc_mi(gene,how)
-#            MIs[gene] = MI
-#        MIs_df = pd.DataFrame.from_dict(MIs,orient='index')
-#        MIs_df.columns = ['MI']
-#        return MIs_df
+        MIs = np.zeros((1,self._data.shape[1]))
+        if how == 'all':
+            for i,gene in enumerate(self._data.columns):
+                MI = self._calc_mi_all(gene)
+                MIs[i] = MI
+            return MIs
+        elif how == 'diag'
+            for i,gene in enumerate(self._data.columns):
+                MI = self._calc_mi_diag(gene)
+                MIs[i] = MI
+            return MIs
+        else:
+            for i,gene in enumerate(self._data.columns):
+                MI = self._calc_mi(gene,how)
+                MIs[i] = MI
+            MIs = pd.DataFrame(data=MIs,columns=['MI'],index=self._data.columns)
+            return MIs
+
+    def run(self,n_iter,how='all',permutation='phenotype'):
+        """TODO: Docstring for run.
+
+        Parameters
+        ----------
+        n_iter : TODO
+        how : Default='how', optional
+            String, one of {'all','diag'}
+
+        Returns
+        -------
+        TODO
+
+        """
+        actual = run_iter(how)
+        dist = pd.DataFrame(0,index=self._data.columns,columns=np.arange(0,n_iter))
+        for i in range(n_iter):
+            #Create random permutation of phenotype labels
+            self._meta.loc[:,'diagnosis'] = np.random.permutation(self._meta['diagnosis'].values)
+            dist.iloc[:,i] = run_iter(how)
+        means = np.mean(dist.values,axis=1)
+        stds = np.std(dist.values,axis=1)
+        if how == 'all': #KWII
+
+        t_stats = (actual - means)/stds
+        p_vals =
+
+
+
 
