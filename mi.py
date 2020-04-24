@@ -249,7 +249,7 @@ class MI(object):
             MIs = pd.DataFrame(data=MIs,columns=['MI'],index=self._data.columns)
             return MIs
 
-    def run(self,n_iter,how='all',permutation='phenotype'):
+    def run(self,n_iter,how='all',permutation='phenotype',FDR=0.05):
         """TODO: Docstring for run.
 
         Parameters
@@ -274,7 +274,14 @@ class MI(object):
         if how == 'all': #KWII
 
         t_stats = (actual - means)/stds
-        p_vals =
+        p = stats.t.sf(t_stats)
+        #Benjamini-Hochberg
+        p_vals = pd.DataFrame(data=p,columns=['p'],index=self._data.columns)
+        p_vals = p_vals.sort_values('p')
+        return p_vals[pvals['p'] <= FDR]
+
+
+
 
 
 
