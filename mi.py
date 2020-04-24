@@ -61,7 +61,7 @@ class MI(object):
         gene_max = np.max(self._data.loc[:,gene])
         gene_bins = np.linspace(gene_min,gene_max,self._gene_bins + 1)
 
-        joint_df = self._meta
+        joint_df = self._meta.copy()
         joint_df[gene] = self._data.loc[:,gene]
         joint_counts,bins = np.histogramdd(joint_df.values,
                 bins=(self._age_bins,self._diag_bins,gene_bins))
@@ -231,13 +231,13 @@ class MI(object):
         self._H_diag = - np.sum(self._diag_dist*np.log2(self._diag_dist))
         self._H_diag_age = - np.sum(diag_age_dist*np.log2(diag_age_dist))
 
-        MIs = np.zeros((1,self._data.shape[1]))
+        MIs = np.zeros(self._data.shape[1])
         if how == 'all':
             for i,gene in enumerate(self._data.columns):
                 MI = self._calc_mi_all(gene)
                 MIs[i] = MI
             return MIs
-        elif how == 'diag'
+        elif how == 'diag':
             for i,gene in enumerate(self._data.columns):
                 MI = self._calc_mi_diag(gene)
                 MIs[i] = MI
@@ -263,16 +263,15 @@ class MI(object):
         TODO
 
         """
-        actual = run_iter(how)
+        actual = self.run_iter(how)
         dist = pd.DataFrame(0,index=self._data.columns,columns=np.arange(0,n_iter))
         for i in range(n_iter):
             #Create random permutation of phenotype labels
             self._meta.loc[:,'diagnosis'] = np.random.permutation(self._meta['diagnosis'].values)
-            dist.iloc[:,i] = run_iter(how)
+            dist.iloc[:,i] = self.run_iter(how)
+            print("Finished Iteration "+str(i))
         means = np.mean(dist.values,axis=1)
         stds = np.std(dist.values,axis=1)
-        if how == 'all': #KWII
-
         t_stats = (actual - means)/stds
         p = stats.t.sf(t_stats)
         #Benjamini-Hochberg
