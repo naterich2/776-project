@@ -43,7 +43,84 @@ class MI(object):
             math.ceil((age_max-age_min + 1)/10.0))) # Bins for approximately 1 bin every 10 years
         self._diag_bins = np.array([0,1,2]) # Diagnosis is categorical with 0 being control, and 1 being positive
 
-    def _calc_mi(self,gene,how='all'):
+    def _calc_mi_all(self,gene):
+        """Calculate KWII for all features
+
+        Parameters
+        ----------
+        gene : String
+            Gene to calculate KWII for
+
+        Returns
+        -------
+        KWII: k-wise Ineraction Information value
+
+        """
+        gene_min = np.min(self._data.loc[:,gene])
+        gene_max = np.max(self._data.loc[:,gene])
+        gene_bins = np.linspace(gene_min,gene_max,self._gene_bins + 1)
+
+        joint_df = self._meta
+        joint_df[gene] = self._data.loc[:,gene]
+        joint_counts,bins = np.histogramdd(joint_df.values,
+                bins=(self._age_bins,self._diag_bins,gene_bins))
+
+        # Find counts for C(age,diag,gene), C(diag,gene) and C(age,gene)
+        joint_counts += self._pseudo
+        diag_gene_counts = np.sum(joint_counts,axis=0) #Sum out age
+        age_gene_counts = np.sum(joint_counts,axis=1) #Sum out diagnosis
+        gene_counts = np.sum(diag_gene_counts,axis=0) #Sum out age and diagnosis
+
+        # Find dist for P(age,diag,gene), P(diag,gene), and P(age,gene)
+        joint_dist = joint_counts/self._obs
+        diag_gene_dist = diag_gene_counts/self._obs
+        age_gene_dist = age_gene_counts/self._obs
+        gene_dist = gene_counts/self._obs
+
+        # Find entropy: H(age,diag,gene), H(diag,gene), and H(age,gene)
+        H_joint = - np.sum(joint_dist*np.log2(joint_dist))
+        H_diag_gene = - np.sum(diag_gene_dist*np.log2(diag_gene_dist))
+        H_age_gene = - np.sum(age_gene_dist*np.log2(age_gene_dist))
+        H_gene = - np.sum(gene_dist*np.log2(gene_dist))
+
+        # Calculate K-way Interaction Information:
+        #   KWII(age,diag,gene) =
+        #       - H(age) - H(diag) - H(gene) + H(diag,gene) + H(age,gene) - H(age,diag,gene)
+        KWII =  H_gene + self._H_diag + self._H_age - \
+                 H_diag_gene - H_age_gene - self._H_diag_age + H_joint
+        return KWII
+    def _calc_mi_diag(self,gene):
+        """Calculate MI for gene with diagnosis
+
+        Parameters
+        ----------
+        gene : String
+            Gene to calculate MI for
+
+        Returns
+        -------
+        MI: Mutual information between gene and diagnosis
+
+        """
+
+        joint_df = self._meta.loc[:,'diagnosis'].to_frame()
+        joint_df[gene] = self._data.loc[:,gene]
+        joint_counts,bins = np.histogramdd(joint_df.loc[:,['diagnosis',gene]].values,
+                bins=(self._diag_bins,gene_bins))
+
+        joint_counts += self._pseudo
+        gene_counts = np.sum(joint_counts,axis=0)
+
+        joint_dist = joint_counts/self._obs
+        gene_dist = gene_counts/self._obs
+
+        H_joint = - np.sum(joint_dist*np.log2(joint_dist))
+        H_gene = - np.sum(gene_dist*np.log2(gene_dist))
+
+        MI =  H_gene + self._H_diag - H_joint
+        return MI
+
+    def _calc_mi(self,gene,how='tci'):
         """Calculate MI for a specific gene with other features
 
         Parameters
@@ -65,7 +142,7 @@ class MI(object):
         gene_max = np.max(self._data.loc[:,gene])
         gene_bins = np.linspace(gene_min,gene_max,self._gene_bins + 1)
 
-        if how == 'all' or how == 'TCI':
+        if how == 'TCI':
             joint_df = self._meta.loc[:,['age','diagnosis']]
             joint_df[gene] = self._data.loc[:,gene]
             joint_counts,bins = np.histogramdd(joint_df.values,
@@ -78,10 +155,10 @@ class MI(object):
             gene_counts = np.sum(np.sum(joint_counts,axis=0),axis=0)
 
             # Find dist for P(age,diag,gene), P(diag,gene), and P(age,gene)
-            joint_dist = joint_counts/np.sum(joint_counts)
-            diag_gene_dist = diag_gene_counts/np.sum(diag_gene_counts)
-            age_gene_dist = age_gene_counts/np.sum(age_gene_counts)
-            gene_dist = gene_counts/np.sum(gene_counts)
+            joint_dist = joint_counts/self._obs
+            diag_gene_dist = diag_gene_counts/self._obs
+            age_gene_dist = age_gene_counts/self._obs
+            gene_dist = gene_counts/self._obs
 
             # Find entropy: H(age,diag,gene), H(diag,gene), and H(age,gene)
             H_joint = - np.sum(joint_dist*np.log2(joint_dist))
@@ -92,13 +169,8 @@ class MI(object):
             # Calculate K-way Interaction Information:
             #   KWII(age,diag,gene) =
             #       - H(age) - H(diag) - H(gene) + H(diag,gene) + H(age,gene) - H(age,diag,gene)
-            if how == 'all':
-                KWII =  H_gene + self._H_diag + self._H_age - \
-                        H_diag_gene - H_age_gene - self._H_diag_age + H_joint
-                return KWII
-            else:
-                TCI = H_gene + self._H_diag + self._H_age - H_joint
-                return TCI
+            TCI = H_gene + self._H_diag + self._H_age - H_joint
+            return TCI
 
         elif how == 'age':
             joint_df = self._meta.loc[:,'age'].to_frame()
@@ -118,28 +190,10 @@ class MI(object):
             MI =  H_gene + self._H_age - H_joint
             return MI
 
-        elif how == 'diagnosis':
-            joint_df = self._meta.loc[:,'diagnosis'].to_frame()
-            joint_df[gene] = self._data.loc[:,gene]
-            joint_counts,bins = np.histogramdd(joint_df.loc[:,['diagnosis',gene]].values,
-                    bins=(self._diag_bins,gene_bins))
-
-            joint_counts += self._pseudo
-            gene_counts = np.sum(joint_counts,axis=0)
-
-            joint_dist = joint_counts/np.sum(joint_counts)
-            gene_dist = gene_counts/np.sum(gene_counts)
-
-            H_joint = - np.sum(joint_dist*np.log2(joint_dist))
-            H_gene = - np.sum(gene_dist*np.log2(gene_dist))
-
-            MI =  H_gene + self._H_diag - H_joint
-            return MI
-
         else:
             raise ValueError("How needs to be one of {'all','age','diagnosis'}")
 
-    def run(self,how='all'):
+    def run_iter(self,how='all'):
         """Run MI for each gene
 
         Parameters
@@ -155,6 +209,7 @@ class MI(object):
 
         """
         total_counts_size = self._gene_bins*(self._age_bins.shape[0] - 1)*(self._diag_bins.shape[0] - 1 )
+        self._total_counts = total_counts_size
         self._obs = self._data.shape[0] + self._pseudo*total_counts_size
 
         age_counts,bins = np.histogram(self._meta['age'],bins=self._age_bins)
@@ -175,11 +230,11 @@ class MI(object):
         self._H_diag = - np.sum(self._diag_dist*np.log2(self._diag_dist))
         self._H_diag_age = - np.sum(diag_age_dist*np.log2(diag_age_dist))
 
-        MIs = {}
-        for gene in self._data.columns:
-            MI = self._calc_mi(gene,how)
-            MIs[gene] = MI
-        MIs_df = pd.DataFrame.from_dict(MIs,orient='index')
-        MIs_df.columns = ['MI']
-        return MIs_df
+#        MIs = {}
+#        for gene in self._data.columns:
+#            MI = self._calc_mi(gene,how)
+#            MIs[gene] = MI
+#        MIs_df = pd.DataFrame.from_dict(MIs,orient='index')
+#        MIs_df.columns = ['MI']
+#        return MIs_df
 
