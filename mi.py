@@ -104,6 +104,10 @@ class MI(object):
 
         """
 
+        gene_min = np.min(self._data.loc[:,gene])
+        gene_max = np.max(self._data.loc[:,gene])
+        gene_bins = np.linspace(gene_min,gene_max,self._gene_bins + 1)
+
         joint_df = self._meta.loc[:,'diagnosis'].to_frame()
         joint_df[gene] = self._data.loc[:,gene]
         joint_counts,bins = np.histogramdd(joint_df.loc[:,['diagnosis',gene]].values,
@@ -273,15 +277,8 @@ class MI(object):
         means = np.mean(dist.values,axis=1)
         stds = np.std(dist.values,axis=1)
         t_stats = (actual - means)/stds
-        p = stats.t.sf(t_stats)
+        p = stats.t.sf(t_stats,n_iter)
         #Benjamini-Hochberg
         p_vals = pd.DataFrame(data=p,columns=['p'],index=self._data.columns)
         p_vals = p_vals.sort_values('p')
         return p_vals
-
-
-
-
-
-
-
