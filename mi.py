@@ -269,16 +269,24 @@ class MI(object):
         """
         actual = self.run_iter(how)
         dist = pd.DataFrame(0,index=self._data.columns,columns=np.arange(0,n_iter))
-        for i in range(n_iter):
+        dist.iloc[:,0] = actual
+        print("Finished Iteration 0")
+        for i in range(1,n_iter):
             #Create random permutation of phenotype labels
             self._meta.loc[:,'diagnosis'] = np.random.permutation(self._meta['diagnosis'].values)
             dist.iloc[:,i] = self.run_iter(how)
             print("Finished Iteration "+str(i))
         means = np.mean(dist.values,axis=1)
+        diff = (actual - means)
+        t_stats = np.zeros_like(diff)
         stds = np.std(dist.values,axis=1)
-        t_stats = (actual - means)/stds
+        non_zero = stds[stds > 0]
+        t_stats[non_zero] = (actual[nonzero] - means[nonzero])/stds[nonzero]
         p = stats.t.sf(t_stats,n_iter)
         #Benjamini-Hochberg
         p_vals = pd.DataFrame(data=p,columns=['p'],index=self._data.columns)
         p_vals = p_vals.sort_values('p')
+        m = p_vals.shape[0]
+        bounds = FDR*np.arange(1,m+1)/m
+        p_vals['bounds'] = bounds
         return p_vals
