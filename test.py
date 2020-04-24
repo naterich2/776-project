@@ -2,6 +2,7 @@
 
 import math
 import requests
+import mi
 
 import pandas as pd
 import numpy as np
@@ -79,9 +80,53 @@ age_info['colors'] = age_info['diagnosis'].replace('M','0').replace('C','1')
 age_info['diag_cat'] = 0
 age_info.loc[age_info['diagnosis'] == 'M','diag_cat'] = 1
 
+### Mutual Information
+meta = age_info.loc[total.index,['age','diag_cat']]
+meta.columns = ['age','diagnosis']
+# Run MI algorithm on all different types
+my_mi = mi.MI(total,meta)
+mis_age = my_mi.run('age')
+mis_diag = my_mi.run('diagnosis')
+mis_kwii = my_mi.run()
+mis_tci = my_mi.run('TCI')
+#relabel columns
+mis_age.columns = ['by_age']
+mis_diag.columns = ['by_diagnosis']
+mis_kwii.columns = ['by_kwii']
+mis_tci.columns = ['by_tci']
+total_mis = mis_age.join(mis_diag).join(mis_kwii).join(mis_tci)
+total_mis.to_csv('data/total_values.csv',index_label=False)
+
+top_100_age = total.loc[:,total_mis.sort_values('by_age').iloc[-100:,].index]
+top_100_diag = total.loc[:,total_mis.sort_values('by_diagnosis').iloc[-100:,].index]
+top_100_kwii = total.loc[:,total_mis.sort_values('by_kwii').iloc[-100:,].index]
+top_100_tci = total.loc[:,total_mis.sort_values('by_tci').iloc[-100:,].index]
+
+top_100_age.to_csv('data/top_100_age.csv',index_label=False)
+top_100_diag.to_csv('data/top_100_diag.csv',index_label=False)
+top_100_kwii.to_csv('data/top_100_kwii.csv',index_label=False)
+top_100_tci.to_csv('data/top_100_tci.csv',index_label=False)
+
 
 ### DIFFUSIONMAP/TSNE
-diffusion = pd.read_csv('data/diffusion_map.csv',index_col=0)
+diffusion_age = pd.read_csv('data/top_100_age_dm.csv',index_col=0)
+diffusion_diag = pd.read_csv('data/top_100_diag_dm.csv',index_col=0)
+diffusion_kwii = pd.read_csv('data/top_100_kwii_dm.csv',index_col=0)
+diffusion_tci = pd.read_csv('data/top_100_tci_dm.csv',index_col=0)
+
+diffusions = (diffusion_age,diffusion_diag,diffusion_kwii,diffusion_tci)
+names = ['By Age','By Diagnosis','By KWII','By TCI']
+plt.style.use('ggplot')
+fig,ax = plt.subplots(2,2,figsize=(10,10))
+for i,axes in enumerate(ax.ravel()):
+    ages = age_info.loc[diffusions[i].index,'age_binned']
+    axes.scatter(diffusions[i].iloc[:,0],diffusions[i].iloc[:,1],
+            c=ages,
+            norm=Normalize(np.min(ages),np.max(ages)))
+    axes.set_xlabel('DC1')
+    axes.set_ylabel('DC2')
+    axes.set_title(names[i])
+
 tsne = TSNE()
 pca = PCA(n_components=10)
 pca_trans = pca.fit_transform(control.append(mdd))
