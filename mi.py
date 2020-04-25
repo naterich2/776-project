@@ -267,26 +267,40 @@ class MI(object):
         TODO
 
         """
+        # Select top 10% to run more iterations on to get p-values
         actual = self.run_iter(how)
-        dist = pd.DataFrame(0,index=self._data.columns,columns=np.arange(0,n_iter))
-        dist.iloc[:,0] = actual
-        print("Finished Iteration 0")
-        for i in range(1,n_iter):
+        # Find indexes of top 10%
+        top_10 = np.where(actual > np.percentile(actual,90))[0]
+        my_data = self._data.copy()
+        my_meta = self._meta.copy()
+        self._data = self._data.iloc[:,top_10]
+        self._meta = self._meta.loc[self._data.index,:]
+
+        dist = pd.DataFrame(0,index=self._data.columns,columns=np.arange(0,n_iter+1))
+        dist.iloc[:,0] = actual[top_10]
+
+        print("Finished actual calc, selecting top 10% and permuting "+str(n_iter)+" times")
+        for i in range(0,n_iter):
             #Create random permutation of phenotype labels
             self._meta.loc[:,'diagnosis'] = np.random.permutation(self._meta['diagnosis'].values)
             dist.iloc[:,i] = self.run_iter(how)
             print("Finished Iteration "+str(i))
-        means = np.mean(dist.values,axis=1)
-        diff = (actual - means)
-        t_stats = np.zeros_like(diff)
-        stds = np.std(dist.values,axis=1)
-        non_zero = stds[stds > 0]
-        t_stats[non_zero] = (actual[nonzero] - means[nonzero])/stds[nonzero]
+        #dist.to_csv('data/dist.csv')
+        means = np.mean(dist,axis=1)
+        diff = (dist.iloc[:,0] - means)
+        stds = np.std(dist,axis=1)
+        t_stats = np.divide(diff,stds,out=np.zeros_like(means),where=stds!=0)
         p = stats.t.sf(t_stats,n_iter)
         #Benjamini-Hochberg
         p_vals = pd.DataFrame(data=p,columns=['p'],index=self._data.columns)
         p_vals = p_vals.sort_values('p')
-        m = p_vals.shape[0]
-        bounds = FDR*np.arange(1,m+1)/m
+        m = my_data.shape[1]
+        bounds = FDR*np.arange(1,p_vals.shape[0] + 1)/m
         p_vals['bounds'] = bounds
+        p_vals['MI'] = dist.iloc[:,0]
+        p_vals['means'] = means
+        p_vals['stds'] = stds
+        p_vals['t_stats'] = t_stats
+        self._data = my_data
+        self._meta = my_meta
         return p_vals
