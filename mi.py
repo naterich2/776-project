@@ -270,16 +270,17 @@ class MI(object):
         # Select top 10% to run more iterations on to get p-values
         actual = self.run_iter(how)
         # Find indexes of top 10%
-        top_10 = np.where(actual > np.percentile(actual,90))[0]
+#        top_10 = np.where(actual > np.percentile(actual,90))[0]
         my_data = self._data.copy()
         my_meta = self._meta.copy()
-        self._data = self._data.iloc[:,top_10]
+#        self._data = self._data.iloc[:,top_10]
         self._meta = self._meta.loc[self._data.index,:]
 
         dist = pd.DataFrame(0,index=self._data.columns,columns=np.arange(0,n_iter+1))
-        dist.iloc[:,0] = actual[top_10]
+        dist.iloc[:,0] = actual.copy()
 
-        print("Finished actual calc, selecting top 10% and permuting "+str(n_iter)+" times")
+        #print("Finished actual calc, selecting top 10% and permuting "+str(n_iter)+" times")
+        print("Finished actual calc, permuting "+str(n_iter)+" times")
         for i in range(0,n_iter):
             #Create random permutation of phenotype labels
             self._meta.loc[:,'diagnosis'] = np.random.permutation(self._meta['diagnosis'].values)
