@@ -12,6 +12,8 @@ from mpl_toolkits.mplot3d import Axes3D
 
 from scipy.cluster.hierarchy import linkage
 from scipy.cluster.hierarchy import dendrogram
+from scipy.stats import norm
+from scipy.stats import beta
 
 from sklearn.manifold import TSNE
 from sklearn.preprocessing import StandardScaler
@@ -168,32 +170,42 @@ ax2.set_zlabel('DC3')
 plt.show()
 
 # Mutual Information
-def calc_mi(gene,age,diagnosis,how='all'):
-    """TODO: Docstring for calc_mi.
 
-    Parameters
-    ----------
-    gene : TODO
-    age : TODO
-    diagnosis : TODO
-    diagnosis : TODO, optional
+## Mutual information analysis
+p_diag = pd.read_csv('data/p_vals_diag.csv',index_col=0)
+p_all = pd.read_csv('data/p_vals_all.csv',index_col=0)
+plt.style.use('ggplot')
 
-    Returns
-    -------
-    TODO
-
-    """
-
-meta = age_info.loc[total.index,['age','diag_cat']]
-diag_bins = np.array([0,1,2])
-for gene in total.columns:
-e   joint_df = meta
-    joint_df[gene] = total.loc[:,gene]
-
-    join = np.histogramdd()
+x = np.arange(1,p_diag.shape[0]+1)
+x_cont = np.linspace(0,1)
+fig,[[ax1,ax2],[ax3,ax4]] = plt.subplots(2,2,figsize=(15,15))
+ax1.scatter(x,p_diag['MI'])
+ax1.set_title('MI values')
+ax2.scatter(x,p_diag['means'])
+ax2.set_title('MI permutation means')
+ax3.scatter(x,p_diag['stds'])
+ax3.set_title('MI permutation standard deviations')
+ax4.plot(x_cont,beta.pdf(x_cont,alpha,beta))
+ax4.plot(x_cont,norm.pdf(x_cont,p_mean,np.sqrt(p_var)))
+ax4.hist(p_diag['p'],density=True)
+ax4.legend(labels=['Beta distribution','Normal distribution'])
+ax4.set_title('Distribution of p-values')
+fig.savefig('out.png')
 
 
 
+fig,[[ax1,ax2],[ax3,ax4]] = plt.subplots(2,2,figsize=(15,15))
+ax1.scatter(x,p_all['MI'])
+ax1.set_title('MI values')
+ax2.scatter(x,p_all['means'])
+ax2.set_title('MI permutation means')
+ax3.scatter(x,p_all['stds'])
+ax3.set_title('MI permutation standard deviations')
+ax4.plot(x_cont,beta.pdf(x_cont,alpha,beta))
+ax4.plot(x_cont,norm.pdf(x_cont,p_mean,np.sqrt(p_var)))
+ax4.hist(p_all['p'],density=True)
+ax4.legend(labels=['Beta distribution','Normal distribution'])
+ax4.set_title('Distribution of p-values')
 
 
 
