@@ -59,6 +59,12 @@ def preprocess():
     total = control.append(mdd)
     total.to_csv('data/total_data.csv',index_label=False)
 
+    # Read gene annotations and only keep coding genes
+    genes = pd.read_csv('data/gene_annotation.csv',index_col=0)
+    genes_intersection = genes[genes['gene_type'] == 'protein_coding'].index.intersection(total.columns)
+
+    total_coding = total.loc[:,genes_intersection]
+
     age_info['colors'] = age_info['diagnosis'].replace('M','0').replace('C','1')
     age_info['diag_cat'] = 0
     age_info.loc[age_info['diagnosis'] == 'M','diag_cat'] = 1
@@ -66,4 +72,5 @@ def preprocess():
     ### Mutual Information
     meta = age_info.loc[total.index,['age','diag_cat']]
     meta.columns = ['age','diagnosis']
-    return (total,meta)
+    print('Finished preprocessing, {} samples of {} genes'.format(*total_coding.shape))
+    return (total_coding,meta)
