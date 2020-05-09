@@ -115,7 +115,7 @@ diffusion_age = pd.read_csv('data/top_100_age_dm.csv',index_col=0)
 diffusion_diag = pd.read_csv('data/top_100_diag_dm.csv',index_col=0)
 diffusion_kwii = pd.read_csv('data/top_100_kwii_dm.csv',index_col=0)
 diffusion_tci = pd.read_csv('data/top_100_tci_dm.csv',index_col=0)
-
+diffusion_all = pd.read_csv('data/p_all_sig_dm.csv',index_col=0)
 diffusions = (diffusion_age,diffusion_diag,diffusion_kwii,diffusion_tci)
 names = ['By Age','By Diagnosis','By KWII','By TCI']
 plt.style.use('ggplot')
@@ -128,7 +128,12 @@ for i,axes in enumerate(ax.ravel()):
     axes.set_xlabel('DC1')
     axes.set_ylabel('DC2')
     axes.set_title(names[i])
-
+fig,ax = plt.subplots(1,1)
+total_meta = pd.read_csv('data/total_meta.csv')
+ages = total_meta['age']
+ax.scatter(diffusion_all.iloc[:,0],diffusion_all.iloc[:,1],
+        c=total_meta['diagnosis'])
+#        norm=Normalize(np.min(ages),np.max(ages)))
 tsne = TSNE()
 pca = PCA(n_components=10)
 pca_trans = pca.fit_transform(control.append(mdd))
@@ -176,7 +181,7 @@ p_diag = pd.read_csv('data/p_vals_diag.csv',index_col=0)
 p_all = pd.read_csv('data/p_vals_all.csv',index_col=0)
 plt.style.use('ggplot')
 
-x = np.arange(1,p_diag.shape[0]+1)
+x = np.arange(1,p_all.shape[0]+1)
 x_cont = np.linspace(0,1)
 fig,[[ax1,ax2],[ax3,ax4]] = plt.subplots(2,2,figsize=(15,15))
 ax1.scatter(x,p_diag['MI'])
@@ -195,17 +200,20 @@ fig.savefig('out.png')
 
 
 fig,[[ax1,ax2],[ax3,ax4]] = plt.subplots(2,2,figsize=(15,15))
+p_mean = np.mean(p_all['p'])
+p_var = np.var(p_all['p'])
 ax1.scatter(x,p_all['MI'])
 ax1.set_title('MI values')
 ax2.scatter(x,p_all['means'])
 ax2.set_title('MI permutation means')
 ax3.scatter(x,p_all['stds'])
 ax3.set_title('MI permutation standard deviations')
-ax4.plot(x_cont,beta.pdf(x_cont,alpha,beta))
+#ax4.plot(x_cont,beta.pdf(x_cont,alpha,beta))
 ax4.plot(x_cont,norm.pdf(x_cont,p_mean,np.sqrt(p_var)))
 ax4.hist(p_all['p'],density=True)
 ax4.legend(labels=['Beta distribution','Normal distribution'])
 ax4.set_title('Distribution of p-values')
+plt.plot(x,p_all['p'])
 
 
 

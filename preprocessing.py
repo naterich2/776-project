@@ -64,6 +64,7 @@ def preprocess():
     genes_intersection = genes[genes['gene_type'] == 'protein_coding'].index.intersection(total.columns)
 
     total_coding = total.loc[:,genes_intersection]
+    total_coding.to_csv('data/total_coding.csv',index_label=False)
 
     age_info['colors'] = age_info['diagnosis'].replace('M','0').replace('C','1')
     age_info['diag_cat'] = 0
