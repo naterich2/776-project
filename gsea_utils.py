@@ -116,6 +116,7 @@ class gsea(object):
         for line in gsea_proc.stdout:
             print(line.decode('utf-8').replace('\n',''))
 
-my_gse = gsea('data/total_data.csv','data/total_meta.csv')
-my_gse.run_gsea(gctfile='total_data.gct',clsfile='total_meta.cls',label='test1',outdir='/home/nrichman/gsea_home/output/test1')
+
+my_gse = gsea('data/total_coding.csv','data/total_meta.csv')
+my_gse.run_gsea(gctfile='total_coding.gct',clsfile='total_meta.cls',label='test1',outdir='/home/nrichman/gsea_home/output/test1',gmx='ftp.broadinstitute.org://pub/gsea/gene_sets/c2.cgp.v7.1.symbols.gmt')
 
