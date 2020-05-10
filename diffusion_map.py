@@ -31,7 +31,7 @@ p_diag_sig = data.loc[:,p_diag_sig_genes.index]
 p_diag_sig.to_csv('data/p_diag_sig.csv',index_label=False)
 
 #
-p_depr = data.loc[:,depr['name']]
+p_depr = data.loc[:,data.columns.intersection(depr['name'])]
 p_depr.to_csv('data/p_depr.csv')
 # Run Rscript
 rscript = subprocess.Popen(['Rscript','diffusion_map.R'])
@@ -64,20 +64,21 @@ plot_embedding(tsne_depr,meta,'TSNE embeddings depression genes',
 
 pca_diag_points = pca_diag.fit_transform(p_diag_sig)
 pca_all_points = pca_all.fit_transform(p_all_sig)
+pca_depr_points = pca_depr.fit_transform(p_depr)
 
 plot_embedding(pca_diag_points,meta,'PCA scores (expression,diagnosis)',
         outfile='figs/pca_diag.png',labels='PC')
 plot_embedding(pca_all_points,meta,'PCA scores (expression,age,diagnosis)',
         outfile='figs/pca_all.png',labels='PC')
-plot_embedding(pca_depr,meta,'PCA scores depression genes',
+plot_embedding(pca_depr_points,meta,'PCA scores depression genes',
         outfile='figs/pca_depr.png',labels='PC')
 
 plot_embedding(p_diag_dm.values,meta,'Diffusionmap embeddings (expression,diagnosis)',
-        outfile='figs/dm_diag.png',labels='DC')
+        outfile='figs/dm_diag.png',labels='DC',by_sample=False)
 plot_embedding(p_all_dm.values,meta,'Diffusionmap embeddings (expression,age,diagnosis)',
-        outfile='figs/dm_all.png',labels='DC')
+        outfile='figs/dm_all.png',labels='DC',by_sample=False)
 plot_embedding(p_depr.values,meta,'Diffusionmap embeddings depression genes',
-        outfile='figs/dm_all.png',labels='DC')
+        outfile='figs/dm_depr.png',labels='DC',by_sample=False)
 
 
 

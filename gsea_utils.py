@@ -50,6 +50,32 @@ class gsea(object):
             print('#',*list(np.unique(diagnosis)),file=out)
         diagnosis.to_csv(clsfile,mode='a',index=False,header=False,line_terminator='\t')
 
+    @staticmethod
+    def create_gmt(genesets,annotations,names,descriptions,outfile):
+        """TODO: Docstring for create_gmx.
+
+        Parameters
+        ----------
+        genesets : list of pandas series or indices to use as genesets
+        names : names of gene sets
+        annotations : path to gene annotations
+        descriptions : descriptions of gene sets
+        outfile : path to outfile
+
+        Returns
+        -------
+        TODO
+
+        """
+        gene_names = pd.read_csv(annotations,index_col=0)
+        with open(outfile,'w') as out:
+            for geneset,name,description in zip(genesets,names,descriptions):
+                prefix = pd.Series([name,description])
+                prefix = prefix.append(gene_names.loc[pd.Index(geneset).intersection(gene_names.index),
+			'gene_name'],ignore_index=True)
+                print(prefix.to_csv(index=False,sep='\t',line_terminator='\t',header=False),file=out)
+
+
 
     def run_gsea(self,
             gctfile,clsfile,label,
@@ -117,6 +143,7 @@ class gsea(object):
             print(line.decode('utf-8').replace('\n',''))
 
 
-my_gse = gsea('data/total_coding.csv','data/total_meta.csv')
-my_gse.run_gsea(gctfile='total_coding.gct',clsfile='total_meta.cls',label='test1',outdir='/home/nrichman/gsea_home/output/test1',gmx='ftp.broadinstitute.org://pub/gsea/gene_sets/c2.cgp.v7.1.symbols.gmt')
+#my_gse = gsea('data/total_coding.csv','data/total_meta.csv')
+#my_gse.run_gsea(gctfile='total_coding.gct',clsfile='total_meta.cls',label='test1',outdir='/home/nrichman/gsea_home/output/test1',gmx='ftp.broadinstitute.org://pub/gsea/gene_sets/c2.cgp.v7.1.symbols.gmt')
+
 

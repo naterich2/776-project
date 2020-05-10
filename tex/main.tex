@@ -1,4 +1,7 @@
 \documentclass{bioinfo}
+\usepackage[export]{adjustbox}
+\usepackage{subfigure}
+\usepackage{caption}
 \copyrightyear{2015} \pubyear{2015}
 
 \access{Advance Access Publication Date: Day Month Year}
@@ -10,59 +13,92 @@
 \subtitle{Subject Section}
 
 \title[]{Investigation of Differential Gene Expression in Major Depressive Disorder Using Information Theory}
-\author[Nathan Richman]{Nathan Richman\,$^{\text{\sfb 1,}*}$}
-\address{$^{\text{\sf 1}}$Department of Biomedical Engineering, University of Wisconsin-Madison, Madison, 55401, USA}
+\author[Nate Richman \textit{et~al}.]{Nate Richman\,$^{\text{\sfb 1,}*}$}
+\address{$^{\text{\sf 1}}$Biomedical Engineering, University of Wisconsin-Madison, Madison, 53715, USA}
 
 \corresp{$^\ast$To whom correspondence should be addressed.}
 
-\history{Received on XXXXX; revised on XXXXX; accepted on XXXXX}
+\history{Received on 5/11/20}
 
-\editor{Associate Editor: XXXXXXX}
+\editor{Associate Editor:}
 
-\abstract{\textbf{Motivation:} Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text Text Text Text Text
-Text Text Text Text Text.\\
-\textbf{Results:} Text  Text Text Text Text Text Text Text Text Text  Text Text Text Text Text
-Text Text Text Text Text Text Text Text Text Text Text Text Text  Text Text Text Text Text Text\\
-\textbf{Availability:} Text  Text Text Text Text Text Text Text Text Text  Text Text Text Text
-Text Text Text Text Text Text Text Text Text Text Text Text Text Text  Text\\
-\textbf{Contact:} \href{name@bio.com}{name@bio.com}\\
-\textbf{Supplementary information:} Supplementary data are available at \textit{Bioinformatics}
-online.}
+\abstract{\textbf{Motivation:} Major Depressive Disorder (MDD) affects millions of people yearly, yet it is still poorly understood. Some genes that are associated with MDD have been presented in the literature. I
+hypothesized that gene expression in MDD could be investigated using tools from information theory,
+such as mutual information and the k-wise interaction information.\\
+\textbf{Results:} I used two Gene Expression Ombnibus (GEO) datasets of post-mortem brain expression profiling
+Results: I used two Gene Expression Ombnibus (GEO) datasets of post-mortem brain expression profiling
+in control and mdd-diagnosed indivuduals to investigate the relationship between gene expression and
+diagnosis, as well as the relationship between gene expression, age and diagnosis. I found 30 genes that
+are associated with a mdd diagnosis, but no significant genes that are associated with diagnosis and age.
+I compared these genes with known genes from brainspan using clustering, gene set enrichment analysis
+and gene ontology. I found that the genes I identified aren’t significantly associated with expected cellular functions but they separate the samples better.\\
+\textbf{Availability:} Source available at \href{https://github.com/naterich2/776-project}{https://github.com/naterich2/776-project} \\
+\textbf{Contact:} \href{nrichman@wisc.edu}{nrichman@wisc.edu}\\
+\textbf{Supplementary information:} Supplementary data available by contacting author}
 
 \maketitle
 
 \section{Introduction}
 
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text. Figure~\ref{fig:01}
-shows that the above method  Text Text Text Text  Text Text Text
-Text Text Text  Text Text.  \citep{Bag01} wants to know about
-{\ldots}{\ldots} text follows.
-\begin{equation}
-\sum \text{\it x}+ \text{\it y} =\text{\it Z}\label{eq:01}\vspace*{-10pt}
-\end{equation}
+Major Depressive Disorder (MDD) is a mental health disorder that cuases a continued feeling of helplessness, sadnes, and loss of interest in doing daily activities \citep{Mayo}. This disorder affects millions of people nationwide and has its causes as both environmental and genetic \citep{Brainspan}.  It is known that many genes affect MDD, and recent studies have undertaken GWAS studies to determine some of these genes \citep{Cai, Malhotra}. Additionally, the Brainspan atlas of the developing
+human brain has identified several genes that are associated with MDD through RNA arrays \citep{Brainspan}. While some of these genes have been identified, GWAS is limited by ungenotyped causal SNPs and RNA arrays limit discovery of new genes or pseudogenes that could be related to MDD.  Using a higher throughput and more thorough approach such as RNA seq would be better for identifying genes, but it is not a trivial task to identify causal genes from this data.
 
+Mutual information (MI) is a measure from information theory of the amount of information gained about one random variable from observing the other, and is calculated as follows:
+\begin{equation}
+    MI(X,Y) = \sum_{x \in X} \sum_{y \in Y} p(x,y) \log_2 \left(\frac{p(x,y)}{p(x) p(y)}\right)
+\end{equation}
+or 
+\begin{align}
+    &MI(X,Y) = H(X) + H(Y) - H(X,Y) \\
+    &\text{Where H(X) is entropy defined as:} \ H(X) = \sum_{x \in X} p(x) \log_2 p(x)
+\end{align}
+Mutual information has been used previously to extract information on regulatory modules \citep{Elemento}.  I hypothesized that mutual information could be used to investigate whether certain genes expression levels predict a diagnosis of MDD.  Additionally, I hypothesized that gene expression in these genes may be a function of time as well as diagnosis since MDD tends to become apparent in early adulthood \citep{Mayo}.  
+
+While mutual information is only defined to quantify the relationship between two variables, there have been a number of extensions to multiple variables.  The first being Total Correlational Information (TCI) \citep{Timme, Watkinson}:
+\begin{equation}
+    TCI(X,Y,Z) = H(X) + H(Y) + H(Z) - H(X,Y,Z)
+\end{equation}
+And the second being k-Wise Interaction Information (KWII) \citep{Timme}:
+\begin{equation}
+    \begin{split}
+        KWII(X,Y,Z) &= - H(X) - H(Y) - H(Z) + \\
+                    &H(X,Y) + H(X,Z) + H(Y,Z) \\
+                    &- H(X,Y,Z)
+    \end{split}
+\end{equation}
+Both of these methods try to gain understanding about the interaction between three random variables, in this case, gene expression, subject age, and subject diagnosis.  A positive KWII indicates synergy between the variabes, whereas a negative KWII indicates redundancy between the variables.
+
+I investigated gene expression in relation to age and diagnosis via both methods and found that KWII was a better measure for this relationship, but mutual information between diagnosis and gene expression was much stronger than both multivariate measures.  I compared the genes I identified to known gene in brainspan and saw differing results using various metrics.
 %\enlargethispage{12pt}
 
-\section{Approach}
+\section{Approach and Methods}
 
-Equation~(\ref{eq:01}) Text Text Text Text Text Text  Text Text
-Text Text Text Text Text Text Text Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about text text text text
-.....
+\subsection{Data}
+I used the Brainspan database and downloaded RPKM values of control subjects for genes associated with depression (\href{http://www.brainspan.org/rnaseq/}{brainspan.org/rnaseq/} \citep{Brainspan}.  Additionally, I downloaded two Gene Expression Omnibus datasets (GSE101521 and GSE80655) and normalized
+expression data using the DeSeq2 library in R \citep{Love}.  Finally, I generated metadata for the datasets.
 
+\subsection{Gene significance by MI, TCI, and KWII}
+I implemented TCI, KWII and MI by using the definition of each from the entropy of marginal or join distributions in python using numpy and pandas.  For each gene I calculated either it's MI with diagnosis or age, its TCI with age and diagnosis, or its KWII with age and diagnosis.  Then I shuffled the diagnosis labels for 500 permutations and repeated the calculation for each gene.  This gave me a background distribution for each gene.  I used determined p-values using z-score against a normal
+distibution and determined significance using an FDR of 0.05 with the Benjamini-Hochberg correction.
 
-\begin{methods}
-\section{Methods}
+\subsection{Validation: diffusionmap, GSEA, and GO}
+Diffusionmap was run in R using the package Destiny from Bioconductor.  Significant genes were exported from the python script in csv format, diffusionmap was then run and the eigenvectors were exported and plotted using matplotlib.  GSEA was run using The Broad Institute GSEA command line software \citep{Subramanian}.  Gene sets were created using the genes determined to be significant using the KWII and MI between diagnosis and expression as well as known genes from Brainspan
+\citep{Brainspan}.  Similarly, GO was run using the PANTHER online database \citep{GO}
 
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
+\section{Results and Discussion}
+
+\subsection{KWII vs. TCI vs. MI}
+After running one iteration of KWII vs. TCI, it was clear that KWII separated the genes much more clearly than TCI, so KWII was used for the rest of the project.  After running 500 iterations and determining the background distribution for each gene, KWII did not elucidate any significant genes at an FDR of 0.05, and only suggested 5 genes at a nominal p-value < 0.01.  MI between diagnosis and expression level performed much better and found 30 genes to be significant at an FDR of
+0.05.
+
+Because KWII did not yield any significant genes, it was not used for further analysis.  Potential issues explaining why KWII might not have yielded any significant genes are discussed later.
+
+\subsection{Comparison of Brainspan MDD genes vs. those suggested by MI}
+
+\subsubsection{DiffusionMap Clustering}
+
+Figure~1\vphantom{\ref{fig:01}}
+Figure~2\vphantom{\ref{fig:01}}
 Text Text Text  Text Text Text Text Text Text  Text Text.
 \citealp{Boffelli03} might want to know about  text text text text
 Text Text Text Text Text Text Text Text Text Text Text Text Text
@@ -77,326 +113,37 @@ Text Text Text Text Text Text Text Text Text  Text Text.
 \citealp{Boffelli03} might want to know about text text text
 text\vspace*{1pt}
 
-\begin{itemize}
-\item for bulleted list, use itemize
-\item for bulleted list, use itemize
-\item for bulleted list, use itemize\vspace*{1pt}
-\end{itemize}
-
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method Text
-Text Text Text Text Text Text Text Text Text Text Text.
-\citealp{Boffelli03} might want to know about text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text Text Text Text Text Text Text.
-
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text\vadjust{\newpage}.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method Text
-Text Text Text Text Text Text Text Text Text Text Text.
-\citealp{Boffelli03} might want to know about text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text Text Text Text Text Text Text.
-
-
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-
-
-
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-
-\subsection{This is subheading}
-
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text
-text. Text Text Text Text Text Text  Text Text Text Text Text Text
-Text Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-
-
-\subsubsection{This is subsubheading}
-
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-
-
-
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text\break
-text text
-
-
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text
-textText Text Text Text Text Text  Text Text Text Text Text Text
-Text Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-
-\enlargethispage{6pt}
-
-
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-
-
-
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-
-
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-
-
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-
 \begin{table}[!t]
-\processtable{This is table caption\label{Tab:01}} {\begin{tabular}{@{}llll@{}}\toprule head1 &
-head2 & head3 & head4\\\midrule
-row1 & row1 & row1 & row1\\
-row2 & row2 & row2 & row2\\
-row3 & row3 & row3 & row3\\
-row4 & row4 & row4 & row4\\\botrule
-\end{tabular}}{This is a footnote}
+    \processtable{GSEA significance values for Brainspan and MI determined gene sets.  The KWII determined gene set (even with nom. p < 0.01) was too small as the minimum gene set size is 15 genes, and the KWII gene set was 5 genes \label{Tab:01}} {\begin{tabular}{@{}llll111@{}}\hline
+Geneset& Size&	ES&	NES&    Nom. p-val&	FDR q-val&	FWER p-val\\\hline
+Brainspan&	45&	-0.23&	-0.89&	0.549&	1.000&	0.498\\
+MI&	30&	-0.26&	-0.76&	0.819&	0.773&	0.617\\\hline
+\end{tabular}}{}
 \end{table}
 
-\end{methods}
 
-\begin{figure}[!tpb]%figure1
-\fboxsep=0pt\colorbox{gray}{\begin{minipage}[t]{235pt} \vbox to 100pt{\vfill\hbox to
-235pt{\hfill\fontsize{24pt}{24pt}\selectfont FPO\hfill}\vfill}
-\end{minipage}}
-%\centerline{\includegraphics{fig01.eps}}
-\caption{Caption, caption.}\label{fig:01}
+\begin{figure}[tph]%figure1
+    %\begin{adjustbox}{center,max width=2\textwidth}
+        \centering
+        \includegraphics[width=1.8\linewidth]{../figs/dm_diag.png}
+        \caption{DiffusionMap clustering on genes identified by MI with diagnosis and expression level.  (Left) Points are plotted on top 3 embedding components; points are colored by the age of the diagnosis. (Right) Points are plotted by patient diagnosis}\label{fig:01}
+  %  \end{adjustbox}
 \end{figure}
-
-%\begin{figure}[!tpb]%figure2
-%%\centerline{\includegraphics{fig02.eps}}
-%\caption{Caption, caption.}\label{fig:02}
-%\end{figure}
-
+\begin{figure}[tph]%figure2
+   % \begin{adjustbox}{center,max width=2\textwidth}
+        \centering
+        \includegraphics[width=1.8\linewidth]{../figs/dm_depr.png}
+        \caption{DiffusionMap clustering on genes associated with depression according to Brainspan.  (Left) Points are plotted on top 3 embedding components; points are colored by the age of the diagnosis. (Right) Points are plotted by patient diagnosis}\label{fig:02}
+    %\end{adjustbox}
+\end{figure}
+\begin{figure}{tph}
+\hfill
+\subfigure[Title A]{\includegraphics[width=\linewidth]{../figs/enplot_DEPR_GENES_3.png}}
+\hfill
+\subfigure[Title B]{\includegraphics[width=\linewidth]{../figs/enplot_DEPR_GENES_3.png}}
+\hfill
+\caption{Title for both}
+\end{figure}
 Text Text Text Text Text Text  Text Text Text Text Text Text Text
 Text Text  Text Text Text Text Text Text.
 Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
@@ -438,6 +185,7 @@ Text Text Text  Text Text Text Text Text Text  Text Text.
 
 \section{Discussion}
 
+Figure~\ref{fig:01}
 Text Text Text Text Text Text  Text Text Text Text Text Text Text
 Text Text  Text Text Text Text Text Text.
 Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
@@ -554,8 +302,57 @@ This work has been supported by the... Text Text  Text Text.\vspace*{-12pt}
 
 \begin{thebibliography}{}
 
-\bibitem[Bofelli {\it et~al}., 2000]{Boffelli03}
-Bofelli,F., Name2, Name3 (2003) Article title, {\it Journal Name}, {\bf 199}, 133-154.
+
+\bibitem[Ashburner {\it et~al}., 2002]{Ashburner}
+Ashburner et al., “Gene ontology: tool for the unifiation of biology,” {\it Nat Genet.}, vol. 25,  no. 1, 2000.
+
+\bibitem[Brainspan., 2020]{Brainspan}
+Brainspan, “Developmental Transcriptome,” Allen Institute for Brain Science, 2020.
+
+\bibitem[Cai {\it et~al}., 2020]{Cai}
+N. Cai et al., “Minimal phenotyping yields GWAS hits of reduced specificity for major depression,” {\it bioRxiv}, [preprint], 2020.
+
+\bibitem[Elemento {\it et~al}., 2007]{Elemento}
+O. Elemento, N. Slonim and S. Tavazoie., "A universal framework for regulatory element discovery across all genomes and data types," {\it Molecular Cell}, vol. 28. no. 2, p. 337-350, 2007.
+
+\bibitem[The Gene Ontology Consortium., 2019]{GO}
+The Gene Ontology Consortium, “The Gene Ontology Resource: 20 years and still Going strong,” {\it Nucleic Acids Res.}, vol. 47, no. D1, p. D330-D338, 2019.
+
+\bibitem[Krebs {\it et~al}., 2019]{Krebs}
+Krebs et al., “Whole blood transcriptome analysis in bipolar disorder reveals strong lithium effect,” {\it Psychological Medicine}, pg. 1-12, 2019.
+
+\bibitem[Love {\it et~al}., 2014]{Love}
+M.I. Love, W. Huber, S. Anders, “Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2.” {\it Genome Biology}, vol. 15, pg. 550, 2014.
+
+\bibitem[Malhotra., 2020]{Malhotra}
+A. K. Malhotra, “The pharmacogenetics of depression: Enter the GWAS,” {\it Am. J. Psychiatry}, vol. 167, no. 5, pp. 493–495, 2010.
+
+\bibitem[Mayo Clinic., 2020]{Mayo}
+Mayo Clinic, “Depression (major depressive disorder),” Mayo Foundation for Medical Education and Research (MFMER), 2020.
+
+\bibitem[Oliphant., 2007]{Oliphant}
+T. E. Oliphant, “Python for Scientific Computing”, Comp. Sci. Eng., vol. 9,  pg. 10-20, 2007.
+
+\bibitem[Pedregosa {\it et~al}., 2010]{Pedregosa}
+Pedregosa et al., “Scikit-learn: Machine Learning in Python,” {\it JMLR}, p. 2825-2830, 2011.
+
+\bibitem[Pham {\it et~al}., 2010]{Pham}
+T. H. Pham, T. B. Ho, Q. D. Nguyen, D. H. Tran, and V. H. Nguyen, “Multivariate mutual information measures for discovering biological networks,” {\it IEEE Conf. Res. Innov. Vis. Futur.}, 2012.
+
+\bibitem[Ramaker {\it et~al}., 2017]{Ramaker}
+Ramaker et al. “Post-mortem molecular profiling of three psychiatric disorders,” {\it Genome Medicine}, vol. 9, no. 72, 2017.
+
+\bibitem[Subramanian {\it et~al}., 2005]{Subramanian}
+A. Subramanian, et al., “Gene set enrichment analysis: A knowledge-based approach for interpreting genome-wide expression profiles,” {\it Proc. Nat. Acad. Sci.}, vol. 102, pg. 15545-15550, 2005.
+
+\bibitem[Timme {\it et~al}., 2012]{Timme}
+N. Timme, W. Alford, B. Flecker, J. M. Beggs, "Multivariate information measures: an experimentalist's perspective," {\it arXiv}, 2012.
+
+\bibitem[Vadodaria {\it et~al}., 2005]{Vadodaria}
+K. C, Vadodaria et al., “Seratonin-induced hyperactivity in SSRI-resistant major depressive disorder patient-derived neurons,” {\it Molecular Psychiatry}, vol. 24, no. 6,  pg. 795-807, 2019.
+
+\bibitem[Watkinson {\it et~al}., 2009]{Watkinson}
+J. Watkinson, K. Liang, X. Wang, T. Zheng, D. Anastassiou, "Inference of Regulatory Gene Interactions from Expression Data Using Three-Way Mutual Information," {\it Ann. N. Y. Acad. Sci.}, vol 1158, p. 302-313, 2009
 
 \bibitem[Bag {\it et~al}., 2001]{Bag01}
 Bag,M., Name2, Name3 (2001) Article title, {\it Journal Name}, {\bf 99}, 33-54.

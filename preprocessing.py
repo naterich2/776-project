@@ -47,7 +47,7 @@ def preprocess():
     age_info = gse80655_age_info.append(gse101521_age_info)
     age_bins = np.array([10,20,30,40,50,60,70,80])
     age_binned = np.digitize(age_info['age'],age_bins) - 1
-    age_info['age_binned'] = age_binned
+    zext Text Text Text Text Text Text Text Text Text Text Text Text Text  Text\\age_info['age_binned'] = age_binned
     age_info.to_csv('data/total_meta.csv',index_label=False)
 
 
