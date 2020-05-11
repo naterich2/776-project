@@ -1,7 +1,8 @@
 \documentclass{bioinfo}
 \usepackage[export]{adjustbox}
-\usepackage{subfigure}
 \usepackage{caption}
+\usepackage{dblfloatfix}
+\usepackage{float}
 \copyrightyear{2015} \pubyear{2015}
 
 \access{Advance Access Publication Date: Day Month Year}
@@ -78,14 +79,14 @@ I used the Brainspan database and downloaded RPKM values of control subjects for
 expression data using the DeSeq2 library in R \citep{Love}.  Finally, I generated metadata for the datasets.
 
 \subsection{Gene significance by MI, TCI, and KWII}
-I implemented TCI, KWII and MI by using the definition of each from the entropy of marginal or join distributions in python using numpy and pandas.  For each gene I calculated either it's MI with diagnosis or age, its TCI with age and diagnosis, or its KWII with age and diagnosis.  Then I shuffled the diagnosis labels for 500 permutations and repeated the calculation for each gene.  This gave me a background distribution for each gene.  I used determined p-values using z-score against a normal
+I implemented TCI, KWII and MI by using the definition of each from the entropy of marginal or join distributions in python using numpy and pandas.  For each gene I calculated either it's MI with diagnosis or age, its TCI with age and diagnosis, or its KWII with age and diagnosis.  Then I shuffled the diagnosis labels for 500 permutations and repeated the calculation for each gene.  This gave me a background distribution for each gene.  I determined p-values using z-score against a normal
 distibution and determined significance using an FDR of 0.05 with the Benjamini-Hochberg correction.
 
 \subsection{Validation: diffusionmap, GSEA, and GO}
 Diffusionmap was run in R using the package Destiny from Bioconductor.  Significant genes were exported from the python script in csv format, diffusionmap was then run and the eigenvectors were exported and plotted using matplotlib.  GSEA was run using The Broad Institute GSEA command line software \citep{Subramanian}.  Gene sets were created using the genes determined to be significant using the KWII and MI between diagnosis and expression as well as known genes from Brainspan
-\citep{Brainspan}.  Similarly, GO was run using the PANTHER online database \citep{GO}
+\citep{Brainspan}.  Gene set mininum size of 15 was used in GSEA, as well as the metric Signal2Noise.    Similarly, GO was run using the PANTHER online database \citep{GO}
 
-\section{Results and Discussion}
+\section{Results}
 
 \subsection{KWII vs. TCI vs. MI}
 After running one iteration of KWII vs. TCI, it was clear that KWII separated the genes much more clearly than TCI, so KWII was used for the rest of the project.  After running 500 iterations and determining the background distribution for each gene, KWII did not elucidate any significant genes at an FDR of 0.05, and only suggested 5 genes at a nominal p-value < 0.01.  MI between diagnosis and expression level performed much better and found 30 genes to be significant at an FDR of
@@ -96,22 +97,29 @@ Because KWII did not yield any significant genes, it was not used for further an
 \subsection{Comparison of Brainspan MDD genes vs. those suggested by MI}
 
 \subsubsection{DiffusionMap Clustering}
+The original ~50,000 genes had too much noise to show any interesting lower dimensional structures. In order to qualify how successful identifying genes by MI was, I performed dimensionality reduction using DiffusionMap on the genes I identified, as well as the genes identified by Brianspan.
 
-Figure~1\vphantom{\ref{fig:01}}
-Figure~2\vphantom{\ref{fig:01}}
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about text text text
-text\vspace*{1pt}
+\paragraph{MI genes} The MI of expression vs. diagnosis had 30 genes that had significant MI with diagnosis, reducing these down to the top 3 diffusionmap embeddings can be seen in Figure~1\vphantom{\ref{fig:01}}.  There are two distinct clusters of samples, however, they don't appear to be correlated with age or diagnosis.  I also confirmed that they are not correlated with dataset that the sample came from (Supplementary).
+
+\paragraph{Brainspan Genes} The genes from the Brainspan database were then used for dimensionality reduction and can be seen in Figure~2\vphantom{\ref{fig:02}}.  Similarly, projection of this data onto the top three embeddings didn't discriminate age or diagnosis.  Additionally, these genes seemed to not separate the samples into clusters quite as well as the genes identified by MI.
+
+While it's not clear what is the driving factor behind the clusters that formed in the embedding performed on the MI genes, the fact that the MI gene set is separating these samples into two clusters that the Brainspan geneset didn't suggests that some of these genes might be worth more investigation.
+\begin{figure*}[tbp!]%
+    \centering
+    \includegraphics[width=0.9\linewidth]{../figs/dm_diag.png}
+        \caption{DiffusionMap clustering on genes identified by MI with diagnosis and expression level.  (Left) Points are plotted on top 3 embedding components; points are colored by the age of the diagnosis. (Right) Points are plotted by patient diagnosis}\label{fig:01}
+    \end{figure*}
+\begin{figure*}[tbp!]%figure2
+   % \begin{adjustbox}{center,max width=2\textwidth}
+    \centering
+    \includegraphics[width=0.9\linewidth]{../figs/dm_depr.png}
+    \caption{DiffusionMap clustering on genes associated with depression according to Brainspan.  (Left) Points are plotted on top 3 embedding components; points are colored by the age of the diagnosis. (Right) Points are plotted by patient diagnosis}\label{fig:02}
+    %\end{adjustbox}
+\end{figure*}
+\clearpage
+\subsection{GSEA}
+GSEA was run on all coding genes against the genesets identified by MI as well as the Brainspan geneset.  The KWII geneset was too small (5 genes) and was excluding by the GSEA software.  Both genesets identified by MI and by Brainspan were differentially expressed in the MDD samples, but neither were significant (Table~1\vphantom{\ref{Tab:01}}).  Enrichment score plots for both gene sets can be seen in Figure~3\vphantom{\ref{fig:03}}.  Neither gene
+set was significantly enriched in the coding genes of these samples.  Additionally, basic GSEA was run using the provided molecular signatures database C2.CGP: chemical and genetic perturbations which contained a geneset for MDD upregulated genes and MDD downregulated genes.  Neither of these genesets were enriched in the MDD samples.
 
 \begin{table}[!t]
     \processtable{GSEA significance values for Brainspan and MI determined gene sets.  The KWII determined gene set (even with nom. p < 0.01) was too small as the minimum gene set size is 15 genes, and the KWII gene set was 5 genes \label{Tab:01}} {\begin{tabular}{@{}llll111@{}}\hline
@@ -120,174 +128,59 @@ Brainspan&	45&	-0.23&	-0.89&	0.549&	1.000&	0.498\\
 MI&	30&	-0.26&	-0.76&	0.819&	0.773&	0.617\\\hline
 \end{tabular}}{}
 \end{table}
+\begin{figure*}[tpb!]%
+    \centering
+    \includegraphics[width=0.9\linewidth]{../figs/ES.png}
+    \caption{Enrichment score plots. (Left) Enrichment scores for Brainspan depression genes supremum was -0.23. (Right) Enrichment scores for genes identified by MI between diagnosis and gene expression, supremum was -0.26}\label{fig:03}
+\end{figure*}
 
-
-\begin{figure}[tph]%figure1
-    %\begin{adjustbox}{center,max width=2\textwidth}
-        \centering
-        \includegraphics[width=1.8\linewidth]{../figs/dm_diag.png}
-        \caption{DiffusionMap clustering on genes identified by MI with diagnosis and expression level.  (Left) Points are plotted on top 3 embedding components; points are colored by the age of the diagnosis. (Right) Points are plotted by patient diagnosis}\label{fig:01}
-  %  \end{adjustbox}
-\end{figure}
-\begin{figure}[tph]%figure2
-   % \begin{adjustbox}{center,max width=2\textwidth}
-        \centering
-        \includegraphics[width=1.8\linewidth]{../figs/dm_depr.png}
-        \caption{DiffusionMap clustering on genes associated with depression according to Brainspan.  (Left) Points are plotted on top 3 embedding components; points are colored by the age of the diagnosis. (Right) Points are plotted by patient diagnosis}\label{fig:02}
-    %\end{adjustbox}
-\end{figure}
-\begin{figure}{tph}
-\hfill
-\subfigure[Title A]{\includegraphics[width=\linewidth]{../figs/enplot_DEPR_GENES_3.png}}
-\hfill
-\subfigure[Title B]{\includegraphics[width=\linewidth]{../figs/enplot_DEPR_GENES_3.png}}
-\hfill
-\caption{Title for both}
-\end{figure}
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-
-
-\subsection{Test1}
-
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-
-
-
-
-
+\subsection{GO}
+Since GSEA yielded non-significant results, I was curious as to whether any of the cellular functions associated with these genes may be suggestive of neurological disorder.  I ran GO using the genes identified by MI which identified no results with an FDR lower than 1, but had some significant p-values, see Table~2\vphantom{\ref{Tab:02}}.  I also ran GO on the genes from Brainspan and found significant results for synaptic transmission and cell-cell signaling, which are
+both expected in a phenotype of depression. 
+\begin{table}[!t]
+    \processtable{GO p-values and fold enrichment for MI  genes\label{Tab:02}} {\begin{tabular}{@{}lll@{}}
+Process&	p-val&	Fold Enrichment\\\hline
+dolichol-linked oligosacch. biosynth. & 4.12E-04& 73.16\\
+phospholipid biosynthesis & 4.37E-04& 11.26\\
+phospholipid biosynthesis & 4.37E-04& 11.26\\
+oligosacch.-lipid intermediate biosynth. & 4.53E-04 & 69.5 \\
+neurotrophin TRK receptor signaling & 4.53E-04 & 69.5 \\
+\end{tabular}}{}
+\end{table}
+\begin{table}[!t]
+    \processtable{GO p-values and fold enrichment for Brainspan genes\label{Tab:03}} {\begin{tabular}{@{}lll@{}}
+Process&	p-val&	Fold Enrichment\\\hline
+chemical synaptic transmission & 	5.48E-28 & 24.99 \\
+anterograde trans-synaptic signaling&  	5.48E-28 & 24.99 \\
+trans-synaptic signaling&  	1.49E-27& 23.93 \\
+synaptic signaling & 	5.19E-27 & 22.65\\
+cell-cell signaling &  	1.38E-24& 10.95 \\
+\end{tabular}}{}
+\end{table}
+\begin{figure*}[tbp!]%
+    \centering
+    \includegraphics[width=0.9\linewidth]{../figs/heatmap.png}
+    \caption{Heatmap of the top differentially expressed genes in the Depression group.  There was a wide difference between }\label{fig:04}
+\end{figure*}
 \section{Discussion}
+The genes I identified using MI did not have the biological relevance that I suggested, nor did they or any other genes have significant mutual information with both age and diagnosis.  However, the data I used had a particularly strong batch effect.  This can be seen in Figure~4\vphantom{\ref{fig:04}}.  This heat map shows the top differentially expressed features in the data set, with the sample names across the top.  I've highlighted only the MDD+ samples from each dataset
+(SL#### vs. V##), but it is evident that the top features in the total dataset are differentially expressed {\it within} the same phenotype.  
 
-Figure~\ref{fig:01}
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text.
+This strong batch effect may have been captured in the mutual information and skewed the results.  After seeing this strong batch effect, I hypothesized that the two clusters in the DiffusionMap for MI genes would be for the two data sources, however the two sources seem to be evenly distributed within these clusters.  Additionally, this dataset did not show significant enrichment for three known MDD-associated genesets, suggesting that this dataset may have poorly captured
+differences between control and MDD samples.
 
-
-
-
-Table~\ref{Tab:01} shows that Text Text Text Text Text  Text Text
-Text Text Text Text. Figure~2\vphantom{\ref{fig:02}} shows that
-the above method Text Text. Text Text Text  Text Text Text Text
-Text Text. Figure~2\vphantom{\ref{fig:02}} shows that the above
-method Text Text. Text Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method Text
-Text.
-
-
-
-
-
-
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-%     please remove the " % " symbol from \centerline{\includegraphics{fig01.eps}}
-%     as it may ignore the figures.
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-
-
-
+Even though there was a strong batch effect that may have disrupted truly significant genes from being detected or led to false positives, the MI method has strong merits.  First the MI genes identified a distinct difference in the samples which is present when the dimensionality is reduced on the MI genes, but not the Brainspan genes ( Figure~1\vphantom{\ref{fig:01}},  Figure~2\vphantom{\ref{fig:02}}).  Additionally, while the genes Identified by MI may have not suggested an
+expected biological function, genes identified by MI may indeed not show significant results using a technique such as GeneOntology.  Similarly to how MI is used to identify regulatory elements far away from genes \citep{Elemento}, MI may also be able to identify cellular components distant from expected cellular processes that might play a role in depression.  In this way, MI may be more effective at discovering associations with depression than investigating pathways such as synapse
+communication and neurotransmitter synthesis/degradation.
 
 \section{Conclusion}
+Mutual information and its multivariate extensions may prove to be useful tools in discovering genetic and epigenetic associations with complex phenotypes such as neurological conditions.  However, MI techniques require a large number of samples to generate enough statistical power to identify significant associations.  This is especially difficult with brain samples that need to be taken post-mortem.  Additionally, removing batch variation from these samples remains a difficult
+and MI is sensitive to this variation.  
 
-(Table~\ref{Tab:01}) Text Text Text Text Text Text  Text Text Text
-Text Text Text Text Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
+These multivariate mutual information techniques followed by validation with dimensionality reduction, gene set enrichment analysis and biological mechanism analysis such as gene ontology demonstrates a good pipeline for investigating the relationship of complex qualitative traits with RNAseq expression, or epigenetic expression datasets. But this technique is only as strong as the dataset it is used on.
 
 
-
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text  Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about  text text text text
-
-\begin{enumerate}
-\item this is item, use enumerate
-\item this is item, use enumerate
-\item this is item, use enumerate
-\end{enumerate}
-
-Text Text Text Text Text Text Text Text Text Text Text Text Text
-Text Text Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows\vadjust{\pagebreak} that the
-above method  Text Text Text Text Text Text Text Text Text Text
-Text Text.  \citealp{Boffelli03} might want to know about text
-text text text Text Text Text Text Text Text  Text Text Text Text
-Text Text Text Text Text Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text Text Text Text Text Text Text  Text Text.
-\citealp{Boffelli03} might want to know about text text text text
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text Text Text Text Text Text\break Text.
-
-
-Text Text Text Text Text Text  Text Text Text Text Text Text Text
-Text Text  Text Text Text Text Text Text.
-Figure~2\vphantom{\ref{fig:02}} shows that the above method  Text
-Text Text Text\vspace*{-10pt}
-
-
-\section*{Acknowledgements}
-
-Text Text Text Text Text Text  Text Text.  \citealp{Boffelli03} might want to know about  text
-text text text\vspace*{-12pt}
-
-\section*{Funding}
-
-This work has been supported by the... Text Text  Text Text.\vspace*{-12pt}
+\clearpage
 
 %\bibliographystyle{natbib}
 %\bibliographystyle{achemnat}
@@ -353,34 +246,5 @@ K. C, Vadodaria et al., “Seratonin-induced hyperactivity in SSRI-resistant maj
 
 \bibitem[Watkinson {\it et~al}., 2009]{Watkinson}
 J. Watkinson, K. Liang, X. Wang, T. Zheng, D. Anastassiou, "Inference of Regulatory Gene Interactions from Expression Data Using Three-Way Mutual Information," {\it Ann. N. Y. Acad. Sci.}, vol 1158, p. 302-313, 2009
-
-\bibitem[Bag {\it et~al}., 2001]{Bag01}
-Bag,M., Name2, Name3 (2001) Article title, {\it Journal Name}, {\bf 99}, 33-54.
-
-\bibitem[Yoo \textit{et~al}., 2003]{Yoo03}
-Yoo,M.S. \textit{et~al}. (2003) Oxidative stress regulated genes
-in nigral dopaminergic neurnol cell: correlation with the known
-pathology in Parkinson's disease. \textit{Brain Res. Mol. Brain
-Res.}, \textbf{110}(Suppl. 1), 76--84.
-
-\bibitem[Lehmann, 1986]{Leh86}
-Lehmann,E.L. (1986) Chapter title. \textit{Book Title}. Vol.~1, 2nd edn. Springer-Verlag, New York.
-
-\bibitem[Crenshaw and Jones, 2003]{Cre03}
-Crenshaw, B.,III, and Jones, W.B.,Jr (2003) The future of clinical
-cancer management: one tumor, one chip. \textit{Bioinformatics},
-doi:10.1093/bioinformatics/btn000.
-
-\bibitem[Auhtor \textit{et~al}. (2000)]{Aut00}
-Auhtor,A.B. \textit{et~al}. (2000) Chapter title. In Smith, A.C.
-(ed.), \textit{Book Title}, 2nd edn. Publisher, Location, Vol. 1, pp.
-???--???.
-
-\bibitem[Bardet, 1920]{Bar20}
-Bardet, G. (1920) Sur un syndrome d'obesite infantile avec
-polydactylie et retinite pigmentaire (contribution a l'etude des
-formes cliniques de l'obesite hypophysaire). PhD Thesis, name of
-institution, Paris, France.
-
 \end{thebibliography}
 \end{document}
