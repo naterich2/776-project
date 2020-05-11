@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1589222535 "main.tex" "main.pdf" "main" 1589222535
+["pdflatex"] 1589226276 "main.tex" "main.pdf" "main" 1589226276
   "../figs/ES.png" 1589146560 190837 e7757fb28fa23e4a92db5862c0ed21ee ""
   "../figs/dm_depr.png" 1589136673 287882 822bb71343606852274396504e732ed4 ""
   "../figs/dm_diag.png" 1589136672 259781 30f87219b98597c276685a0894a7c40e ""
@@ -120,11 +120,11 @@
   "float.sty" 1448473786 6748 05ea9c57d78539ab35f4e59b518df4ea ""
   "flushend.sty" 1448473786 5110 4612226a520e954eb087fba78e1a0a02 ""
   "graphicx.sty" 1448473786 7880 e5b92297fb192340acd8794d6a22b953 ""
-  "main.aux" 1589222512 4935 ee50d26196c4610f5bb5ff505d23107e "pdflatex"
-  "main.tex" 1589222534 20399 c7af55a29be57463900b319ad0f24154 ""
+  "main.aux" 1589226117 5130 2e3cff925364c82f0d0004794e105cf2 "pdflatex"
+  "main.tex" 1589226275 20681 a36b1b92f6987f3df925961ef0188b90 ""
   "natbib.sty" 1448473786 34226 b58b1fa5f3ade89cdf17cb61154dea2e ""
   "stfloats.sty" 1448473786 9600 b6785ed5a305717e5c3e25f3f7ac7280 ""
   (generated)
-  "main.aux"
-  "main.pdf"
   "main.log"
+  "main.pdf"
+  "main.aux"

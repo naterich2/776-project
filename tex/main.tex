@@ -27,7 +27,6 @@
 hypothesized that gene expression in MDD could be investigated using tools from information theory,
 such as mutual information and the k-wise interaction information.\\
 \textbf{Results:} I used two Gene Expression Ombnibus (GEO) datasets of post-mortem brain expression profiling
-Results: I used two Gene Expression Ombnibus (GEO) datasets of post-mortem brain expression profiling
 in control and mdd-diagnosed indivuduals to investigate the relationship between gene expression and
 diagnosis, as well as the relationship between gene expression, age and diagnosis. I found 30 genes that
 are associated with a mdd diagnosis, but no significant genes that are associated with diagnosis and age.
@@ -41,7 +40,7 @@ and gene ontology. I found that the genes I identified aren’t significantly as
 
 \section{Introduction}
 
-Major Depressive Disorder (MDD) is a mental health disorder that cuases a continued feeling of helplessness, sadnes, and loss of interest in doing daily activities \citep{Mayo}. This disorder affects millions of people nationwide and has its causes as both environmental and genetic \citep{Brainspan}.  It is known that many genes affect MDD, and recent studies have undertaken GWAS studies to determine some of these genes \citep{Cai, Malhotra}. Additionally, the Brainspan atlas of the developing
+Major Depressive Disorder (MDD) is a mental health disorder that causes a continued feeling of helplessness, sadnes, and loss of interest in doing daily activities \citep{Mayo}. This disorder affects millions of people nationwide and has its causes as both environmental and genetic \citep{Brainspan}.  It is known that many genes affect MDD, and recent studies have undertaken GWAS to determine some of these genes \citep{Cai, Malhotra}. Additionally, the Brainspan atlas of the developing
 human brain has identified several genes that are associated with MDD through RNA arrays \citep{Brainspan}. While some of these genes have been identified, GWAS is limited by ungenotyped causal SNPs and RNA arrays limit discovery of new genes or pseudogenes that could be related to MDD.  Using a higher throughput and more thorough approach such as RNA seq would be better for identifying genes, but it is not a trivial task to identify causal genes from this data.
 
 Mutual information (MI) is a measure from information theory of the amount of information gained about one random variable from observing the other, and is calculated as follows:
@@ -69,7 +68,7 @@ And the second being k-Wise Interaction Information (KWII) \citep{Timme}:
 \end{equation}
 Both of these methods try to gain understanding about the interaction between three random variables, in this case, gene expression, subject age, and subject diagnosis.  A positive KWII indicates synergy between the variabes, whereas a negative KWII indicates redundancy between the variables.
 
-I investigated gene expression in relation to age and diagnosis via both methods and found that KWII was a better measure for this relationship, but mutual information between diagnosis and gene expression was much stronger than both multivariate measures.  I compared the genes I identified to known gene in brainspan and saw differing results using various metrics.
+I investigated gene expression in relation to age and diagnosis via both methods and found that KWII was a better measure for this relationship, but mutual information between diagnosis and gene expression was much stronger than both multivariate measures.  I compared the genes I identified to known genes from Brainspan and saw differing results using various metrics.
 %\enlargethispage{12pt}
 
 \section{Approach and Methods}
@@ -80,7 +79,7 @@ expression data using the DeSeq2 library in R \citep{Love}.  Finally, I generate
 
 \subsection{Gene significance by MI, TCI, and KWII}
 I implemented TCI, KWII and MI by using the definition of each from the entropy of marginal or join distributions in python using numpy and pandas.  For each gene I calculated either it's MI with diagnosis or age, its TCI with age and diagnosis, or its KWII with age and diagnosis.  Then I shuffled the diagnosis labels for 500 permutations and repeated the calculation for each gene.  This gave me a background distribution for each gene.  I determined p-values using z-score against a normal
-distibution and determined significance using an FDR of 0.05 with the Benjamini-Hochberg correction.
+distibution and determined significance using a False Discovery Rate (FDR) of 0.05 using the Benjamini-Hochberg Method.
 
 \subsection{Validation: diffusionmap, GSEA, and GO}
 Diffusionmap was run in R using the package Destiny from Bioconductor.  Significant genes were exported from the python script in csv format, diffusionmap was then run and the eigenvectors were exported and plotted using matplotlib.  GSEA was run using The Broad Institute GSEA command line software \citep{Subramanian}.  Gene sets were created using the genes determined to be significant using the KWII and MI between diagnosis and expression as well as known genes from Brainspan
@@ -107,13 +106,13 @@ While it's not clear what is the driving factor behind the clusters that formed 
 \begin{figure*}[tbp!]%
     \centering
     \includegraphics[width=0.9\linewidth]{../figs/dm_diag.png}
-        \caption{DiffusionMap clustering on genes identified by MI with diagnosis and expression level.  (Left) Points are plotted on top 3 embedding components; points are colored by the age of the diagnosis. (Right) Points are plotted by patient diagnosis}\label{fig:01}
+        \caption{DiffusionMap clustering on genes identified by MI with diagnosis and expression level.  (Left) Points are plotted on top 3 embedding components; points are colored by the age of the diagnosis. (Right) Points are colored by patient diagnosis}\label{fig:01}
     \end{figure*}
 \begin{figure*}[tbp!]%figure2
    % \begin{adjustbox}{center,max width=2\textwidth}
     \centering
     \includegraphics[width=0.9\linewidth]{../figs/dm_depr.png}
-    \caption{DiffusionMap clustering on genes associated with depression according to Brainspan.  (Left) Points are plotted on top 3 embedding components; points are colored by the age of the diagnosis. (Right) Points are plotted by patient diagnosis}\label{fig:02}
+    \caption{DiffusionMap clustering on genes associated with depression according to Brainspan.  (Left) Points are plotted on top 3 embedding components; points are colored by the age of the diagnosis. (Right) Points are colored by patient diagnosis}\label{fig:02}
     %\end{adjustbox}
 \end{figure*}
 \clearpage
@@ -135,8 +134,8 @@ MI&	30&	-0.26&	-0.76&	0.819&	0.773&	0.617\\\hline
 \end{figure*}
 
 \subsection{GO}
-Since GSEA yielded non-significant results, I was curious as to whether any of the cellular functions associated with these genes may be suggestive of neurological disorder.  I ran GO using the genes identified by MI which identified no results with an FDR lower than 1, but had some significant p-values, see Table~2\vphantom{\ref{Tab:02}}.  I also ran GO on the genes from Brainspan and found significant results for synaptic transmission and cell-cell signaling, which are
-both expected in a phenotype of depression. 
+Since GSEA yielded non-significant results, I was curious as to whether any of the cellular functions associated with these genes may be suggestive of neurological disorder.  I ran GO using the genes identified by MI which identified no results with an FDR lower than 1, but had some significant p-values, see Table~2\vphantom{\ref{Tab:02}}.  I also ran GO on the genes from Brainspan and found significant results (by FDR) for synaptic transmission and cell-cell signaling, which are
+both expected in a phenotype of depression.  Notably, the results on the Brainspan geneset are much more significant compared to the set identified by MI.
 \begin{table}[!t]
     \processtable{GO p-values and fold enrichment for MI  genes\label{Tab:02}} {\begin{tabular}{@{}lll@{}}
 Process&	p-val&	Fold Enrichment\\\hline
@@ -160,7 +159,7 @@ cell-cell signaling &  	1.38E-24& 10.95 \\
 \begin{figure*}[tbp!]%
     \centering
     \includegraphics[width=0.9\linewidth]{../figs/heatmap.png}
-    \caption{Heatmap of the top differentially expressed genes in the Depression group.  There was a wide difference between }\label{fig:04}
+    \caption{Heatmap of the top differentially expressed genes in the Depression group.  There was a wide difference between dataset the sample came from with one set starting with SL, and the other starting with V. Blue denotes downregulated while red is upregulatad, intensity correlates to level of up/downregulation.Figure generated using GSEA software \citep{Subramanian}}\label{fig:04}
 \end{figure*}
 \section{Discussion}
 The genes I identified using MI did not have the biological relevance that I suggested, nor did they or any other genes have significant mutual information with both age and diagnosis.  However, the data I used had a particularly strong batch effect.  This can be seen in Figure~4\vphantom{\ref{fig:04}}.  This heat map shows the top differentially expressed features in the data set, with the sample names across the top.  I've highlighted only the MDD+ samples from each dataset

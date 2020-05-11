@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Arch Linux) (preloaded format=pdflatex 2020.5.9)  11 MAY 2020 13:42
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Arch Linux) (preloaded format=pdflatex 2020.5.9)  11 MAY 2020 14:44
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -479,7 +479,7 @@ l.11 \begin{document}
                      
 Type `X' dammit!
 
-LaTeX Font Info:    Trying to load font information for LY1+phv on input line 40.
+LaTeX Font Info:    Trying to load font information for LY1+phv on input line 39.
 (/usr/share/texmf-dist/tex/latex/ly1/ly1phv.fd
 File: ly1phv.fd 2001/02/01 scalable font definitions for LY1/phv using Berry names.
 )
@@ -490,73 +490,73 @@ Package epstopdf Info: Source file: <OUP_First_SBk_Bot_8401.eps>
 (epstopdf)                    date: 2015-11-25 11:49:46
 (epstopdf)                    size: 9259 bytes
 (epstopdf)             Command: <repstopdf --outfile=OUP_First_SBk_Bot_8401-eps-converted-to.pdf OUP_First_SBk_Bot_8401.eps>
-(epstopdf)             \includegraphics on input line 40.
+(epstopdf)             \includegraphics on input line 39.
 Package epstopdf Info: Output file is already uptodate.
 <OUP_First_SBk_Bot_8401-eps-converted-to.pdf, id=1, 54.2025pt x 54.2025pt>
 File: OUP_First_SBk_Bot_8401-eps-converted-to.pdf Graphic file (type pdf)
 <use OUP_First_SBk_Bot_8401-eps-converted-to.pdf>
-Package pdftex.def Info: OUP_First_SBk_Bot_8401-eps-converted-to.pdf  used on input line 40.
+Package pdftex.def Info: OUP_First_SBk_Bot_8401-eps-converted-to.pdf  used on input line 39.
 (pdftex.def)             Requested size: 54.20236pt x 54.20236pt.
 LaTeX Font Info:    Font shape `LY1/phv/bx/n' in size <8> not available
-(Font)              Font shape `LY1/phv/b/n' tried instead on input line 40.
+(Font)              Font shape `LY1/phv/b/n' tried instead on input line 39.
 LaTeX Font Info:    Font shape `LY1/phv/bx/n' in size <18> not available
-(Font)              Font shape `LY1/phv/b/n' tried instead on input line 40.
+(Font)              Font shape `LY1/phv/b/n' tried instead on input line 39.
 LaTeX Font Info:    Font shape `LY1/phv/bx/n' in size <12> not available
-(Font)              Font shape `LY1/phv/b/n' tried instead on input line 40.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 40.
+(Font)              Font shape `LY1/phv/b/n' tried instead on input line 39.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 39.
  (/usr/share/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 40.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 39.
  (/usr/share/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 LaTeX Font Info:    Font shape `LY1/phv/bx/n' in size <9> not available
-(Font)              Font shape `LY1/phv/b/n' tried instead on input line 40.
+(Font)              Font shape `LY1/phv/b/n' tried instead on input line 39.
 LaTeX Font Info:    Font shape `LY1/phv/bx/n' in size <7> not available
-(Font)              Font shape `LY1/phv/b/n' tried instead on input line 40.
+(Font)              Font shape `LY1/phv/b/n' tried instead on input line 39.
 
 
 LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <6.5> not available
-(Font)              size <6> substituted on input line 40.
+(Font)              size <6> substituted on input line 39.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <6.5> not available
-(Font)              size <6> substituted on input line 40.
+(Font)              size <6> substituted on input line 39.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <6.5> not available
-(Font)              size <6> substituted on input line 40.
+(Font)              size <6> substituted on input line 39.
 
-LaTeX Font Info:    Calculating math sizes for size <8.5> on input line 40.
+LaTeX Font Info:    Calculating math sizes for size <8.5> on input line 39.
 
 LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <8.5> not available
-(Font)              size <8> substituted on input line 40.
+(Font)              size <8> substituted on input line 39.
 
 
 LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <4.25> not available
-(Font)              size <5> substituted on input line 40.
+(Font)              size <5> substituted on input line 39.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <8.5> not available
-(Font)              size <8> substituted on input line 40.
+(Font)              size <8> substituted on input line 39.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <4.25> not available
-(Font)              size <5> substituted on input line 40.
+(Font)              size <5> substituted on input line 39.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <8.5> not available
-(Font)              size <8> substituted on input line 40.
+(Font)              size <8> substituted on input line 39.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <4.25> not available
-(Font)              size <5> substituted on input line 40.
+(Font)              size <5> substituted on input line 39.
 
 LaTeX Font Info:    Font shape `LY1/phv/bx/n' in size <10> not available
-(Font)              Font shape `LY1/phv/b/n' tried instead on input line 40.
+(Font)              Font shape `LY1/phv/b/n' tried instead on input line 39.
 
-Underfull \hbox (badness 10000) detected at line 40
+Underfull \hbox (badness 10000) detected at line 39
 []
  []
 
@@ -573,34 +573,34 @@ Overfull \hbox (1.12001pt too wide) has occurred while \output is active
 
 
  <./OUP_First_SBk_Bot_8401-eps-converted-to.pdf>]
-Underfull \hbox (badness 5288) in paragraph at lines 78--80
+Underfull \hbox (badness 5288) in paragraph at lines 77--79
 \LY1/ptm/m/n/8 Omnibus datasets (GSE101521 and GSE80655) and normalized
  []
 
 LaTeX Font Info:    Font shape `LY1/ptm/bx/n' in size <8> not available
-(Font)              Font shape `LY1/ptm/b/n' tried instead on input line 99.
+(Font)              Font shape `LY1/ptm/b/n' tried instead on input line 98.
 
-Underfull \hbox (badness 1867) in paragraph at lines 100--101
+Underfull \hbox (badness 1867) in paragraph at lines 99--100
 \LY1/ptm/m/n/8 lower dimensional structures. In order to qualify how successful
  []
 
 
-Underfull \hbox (badness 1342) in paragraph at lines 102--103
+Underfull \hbox (badness 1342) in paragraph at lines 101--102
  \LY1/ptm/m/it/8 MI genes[] \LY1/ptm/m/n/8 The MI of expression vs. diagnosis had 30 genes that
  []
 
 <../figs/dm_diag.png, id=25, 1084.05pt x 722.7pt>
 File: ../figs/dm_diag.png Graphic file (type png)
 <use ../figs/dm_diag.png>
-Package pdftex.def Info: ../figs/dm_diag.png  used on input line 109.
+Package pdftex.def Info: ../figs/dm_diag.png  used on input line 108.
 (pdftex.def)             Requested size: 437.39703pt x 291.60017pt.
 <../figs/dm_depr.png, id=27, 1084.05pt x 722.7pt>
 File: ../figs/dm_depr.png Graphic file (type png)
 <use ../figs/dm_depr.png>
-Package pdftex.def Info: ../figs/dm_depr.png  used on input line 115.
+Package pdftex.def Info: ../figs/dm_depr.png  used on input line 114.
 (pdftex.def)             Requested size: 437.39703pt x 291.60017pt.
 LaTeX Font Info:    Font shape `LY1/phv/m/it' in size <8> not available
-(Font)              Font shape `LY1/phv/m/sl' tried instead on input line 119.
+(Font)              Font shape `LY1/phv/m/sl' tried instead on input line 118.
 
 Overfull \hbox (252.0pt too wide) has occurred while \output is active
 [][] 
@@ -612,110 +612,110 @@ Overfull \hbox (252.0pt too wide) has occurred while \output is active
  []
 
 [3 <../figs/dm_diag.png> <../figs/dm_depr.png>]
-LaTeX Font Info:    Calculating math sizes for size <7.5> on input line 129.
+LaTeX Font Info:    Calculating math sizes for size <7.5> on input line 128.
 
 
 LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <7.5> not available
-(Font)              size <7> substituted on input line 129.
+(Font)              size <7> substituted on input line 128.
 
 
 LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <3.75> not available
-(Font)              size <5> substituted on input line 129.
+(Font)              size <5> substituted on input line 128.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <7.5> not available
-(Font)              size <7> substituted on input line 129.
+(Font)              size <7> substituted on input line 128.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <3.75> not available
-(Font)              size <5> substituted on input line 129.
+(Font)              size <5> substituted on input line 128.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <7.5> not available
-(Font)              size <7> substituted on input line 129.
+(Font)              size <7> substituted on input line 128.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <3.75> not available
-(Font)              size <5> substituted on input line 129.
+(Font)              size <5> substituted on input line 128.
 
 
-./main.tex:129: Package array Error:  Illegal pream-token (1): `c' used.
-
-See the array package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.129 \end{tabular}}{}
-                      
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-
-./main.tex:129: Package array Error:  Illegal pream-token (1): `c' used.
+./main.tex:128: Package array Error:  Illegal pream-token (1): `c' used.
 
 See the array package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.129 \end{tabular}}{}
+l.128 \end{tabular}}{}
                       
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
 
-./main.tex:129: Package array Error:  Illegal pream-token (1): `c' used.
+./main.tex:128: Package array Error:  Illegal pream-token (1): `c' used.
 
 See the array package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.129 \end{tabular}}{}
+l.128 \end{tabular}}{}
                       
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
-LaTeX Font Info:    Trying to load font information for LY1+phb on input line 129.
-LaTeX Font Info:    No file LY1phb.fd. on input line 129.
+
+./main.tex:128: Package array Error:  Illegal pream-token (1): `c' used.
+
+See the array package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.128 \end{tabular}}{}
+                      
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+LaTeX Font Info:    Trying to load font information for LY1+phb on input line 128.
+LaTeX Font Info:    No file LY1phb.fd. on input line 128.
 
 LaTeX Font Warning: Font shape `LY1/phb/m/n' undefined
-(Font)              using `LY1/ptm/m/n' instead on input line 129.
+(Font)              using `LY1/ptm/m/n' instead on input line 128.
 
 
 LaTeX Font Warning: Font shape `LY1/phb/bx/n' undefined
-(Font)              using `LY1/phb/m/n' instead on input line 129.
+(Font)              using `LY1/phb/m/n' instead on input line 128.
 
 
-./main.tex:129: Package array Error:  Illegal pream-token (1): `c' used.
+./main.tex:128: Package array Error:  Illegal pream-token (1): `c' used.
 
 See the array package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.129 \end{tabular}}{}
+l.128 \end{tabular}}{}
                       
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
 
-./main.tex:129: Package array Error:  Illegal pream-token (1): `c' used.
+./main.tex:128: Package array Error:  Illegal pream-token (1): `c' used.
 
 See the array package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.129 \end{tabular}}{}
+l.128 \end{tabular}}{}
                       
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
 
-./main.tex:129: Package array Error:  Illegal pream-token (1): `c' used.
+./main.tex:128: Package array Error:  Illegal pream-token (1): `c' used.
 
 See the array package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.129 \end{tabular}}{}
+l.128 \end{tabular}}{}
                       
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
@@ -723,55 +723,55 @@ If that doesn't work, type  X <return>  to quit.
 <../figs/ES.png, id=38, 902.6222pt x 454.69875pt>
 File: ../figs/ES.png Graphic file (type png)
 <use ../figs/ES.png>
-Package pdftex.def Info: ../figs/ES.png  used on input line 133.
+Package pdftex.def Info: ../figs/ES.png  used on input line 132.
 (pdftex.def)             Requested size: 437.39703pt x 220.3413pt.
 <../figs/heatmap.png, id=39, 557.83406pt x 262.73157pt>
 File: ../figs/heatmap.png Graphic file (type png)
 <use ../figs/heatmap.png>
-Package pdftex.def Info: ../figs/heatmap.png  used on input line 162.
+Package pdftex.def Info: ../figs/heatmap.png  used on input line 161.
 (pdftex.def)             Requested size: 437.39703pt x 206.0122pt.
-./main.tex:167: You can't use `macro parameter character #' in horizontal mode.
-l.167 (SL#
+./main.tex:166: You can't use `macro parameter character #' in horizontal mode.
+l.166 (SL#
           ### vs. V##), but it is evident that the top features in the total...
 Sorry, but I'm not programmed to handle this case;
 I'll just pretend that you didn't ask for it.
 If you're in the wrong mode, you might be able to
 return to the right one by typing `I}' or `I$' or `I\par'.
 
-./main.tex:167: You can't use `macro parameter character #' in horizontal mode.
-l.167 (SL##
+./main.tex:166: You can't use `macro parameter character #' in horizontal mode.
+l.166 (SL##
            ## vs. V##), but it is evident that the top features in the total...
 Sorry, but I'm not programmed to handle this case;
 I'll just pretend that you didn't ask for it.
 If you're in the wrong mode, you might be able to
 return to the right one by typing `I}' or `I$' or `I\par'.
 
-./main.tex:167: You can't use `macro parameter character #' in horizontal mode.
-l.167 (SL###
+./main.tex:166: You can't use `macro parameter character #' in horizontal mode.
+l.166 (SL###
             # vs. V##), but it is evident that the top features in the total...
 Sorry, but I'm not programmed to handle this case;
 I'll just pretend that you didn't ask for it.
 If you're in the wrong mode, you might be able to
 return to the right one by typing `I}' or `I$' or `I\par'.
 
-./main.tex:167: You can't use `macro parameter character #' in horizontal mode.
-l.167 (SL####
+./main.tex:166: You can't use `macro parameter character #' in horizontal mode.
+l.166 (SL####
               vs. V##), but it is evident that the top features in the total...
 Sorry, but I'm not programmed to handle this case;
 I'll just pretend that you didn't ask for it.
 If you're in the wrong mode, you might be able to
 return to the right one by typing `I}' or `I$' or `I\par'.
 
-./main.tex:167: You can't use `macro parameter character #' in horizontal mode.
-l.167 (SL#### vs. V#
+./main.tex:166: You can't use `macro parameter character #' in horizontal mode.
+l.166 (SL#### vs. V#
                     #), but it is evident that the top features in the total...
 Sorry, but I'm not programmed to handle this case;
 I'll just pretend that you didn't ask for it.
 If you're in the wrong mode, you might be able to
 return to the right one by typing `I}' or `I$' or `I\par'.
 
-./main.tex:167: You can't use `macro parameter character #' in horizontal mode.
-l.167 (SL#### vs. V##
+./main.tex:166: You can't use `macro parameter character #' in horizontal mode.
+l.166 (SL#### vs. V##
                      ), but it is evident that the top features in the total...
 Sorry, but I'm not programmed to handle this case;
 I'll just pretend that you didn't ask for it.
@@ -779,7 +779,7 @@ If you're in the wrong mode, you might be able to
 return to the right one by typing `I}' or `I$' or `I\par'.
 
 
-Underfull \hbox (badness 2401) in paragraph at lines 180--181
+Underfull \hbox (badness 2401) in paragraph at lines 179--180
 []\LY1/ptm/m/n/8 These multivariate mutual information techniques followed by
  []
 
@@ -854,9 +854,9 @@ Here is how much of TeX's memory you used:
  9313 multiletter control sequences out of 15000+600000
  55158 words of font info for 103 fonts, out of 8000000 for 9000
  1145 hyphenation exceptions out of 8191
- 46i,15n,40p,524b,300s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 46i,15n,40p,516b,300s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf-dist/fonts/enc/dvips/ly1/texnansi.enc}</usr/share/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmbsy9.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/share/texmf-dist/fonts/type1/urw/helvetic/uhvr8ac.pfb></usr/share/texmf-dist/fonts/type1/urw/helvetic/uhvro8a.pfb></usr/share/texmf-dist/fonts/type1/urw/helvetic/uhvro8ac.pfb></usr/share/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (6 pages, 886860 bytes).
+Output written on main.pdf (6 pages, 887160 bytes).
 PDF statistics:
  100 PDF objects out of 1000 (max. 8388607)
  67 compressed objects within 1 object stream
